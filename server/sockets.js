@@ -11,25 +11,6 @@ const characters = {};
 // our socketio instance
 let io;
 
-// Possible directions a user can move
-// their character. These are mapped
-// to integers for fast/small storage
-const directions = {
-  DOWNLEFT: 0,
-  DOWN: 1,
-  DOWNRIGHT: 2,
-  LEFT: 3,
-  UPLEFT: 4,
-  RIGHT: 5,
-  UPRIGHT: 6,
-  UP: 7,
-};
-
-// function to notify everyone when a user has been hit
-const handleAttack = (userHash) => {
-  io.sockets.in('room1').emit('attackHit', userHash);
-};
-
 // function to setup our socket server
 const setupSockets = (ioServer) => {
   // set our io server instance
@@ -66,68 +47,7 @@ const setupSockets = (ioServer) => {
       // notify everyone of the user's updated movement
       io.sockets.in('room1').emit('updatedMovement', characters[socket.hash]);
     });
-
     // when this user sends an attack request
-    socket.on('attack', (data) => {
-      const attack = data;
-
-      // should we handle the attack
-      // I only did this because I did not code
-      // for all player directions.
-      let handleAttackEvent = true;
-
-      // which direction is the user attacking in
-      // will be an integer from our directions structure
-      switch (attack.direction) {
-        // if down, set the height/width of attack to face down
-        // and offset attack downward from user
-        case directions.DOWN: {
-          attack.width = 66;
-          attack.height = 183;
-          attack.y = attack.y + 121;
-          break;
-        }
-        // if left, set the height/width of attack to face left
-        // and offset attack left from user
-        case directions.LEFT: {
-          attack.width = 183;
-          attack.height = 66;
-          attack.x = attack.x - 183;
-          break;
-        }
-        // if right, set the height/width of attack to face right
-        // and offset attack right from user
-        case directions.RIGHT: {
-          attack.width = 183;
-          attack.height = 66;
-          attack.x = attack.x + 61;
-          break;
-        }
-        // if up, set the height/width of attack to face up
-        // and offset attack upward from user
-        case directions.UP: {
-          attack.width = 66;
-          attack.height = 183;
-          attack.y = attack.y - 183;
-          break;
-        }
-        // any other direction we will not handle
-        default: {
-          handleAttackEvent = false;
-        }
-      }
-
-      // if handling the attack
-      if (handleAttackEvent) {
-        // send the graphical update to everyone
-        // This will NOT perform the collision or character death
-        // This just updates graphics so people see the attack
-        io.sockets.in('room1').emit('attackUpdate', attack);
-
-        // add the attack to our physics calculations
-        physics.addAttack(attack);
-      }
-    });
 
     // when the user disconnects
     socket.on('disconnect', () => {
@@ -145,4 +65,3 @@ const setupSockets = (ioServer) => {
 };
 
 module.exports.setupSockets = setupSockets;
-module.exports.handleAttack = handleAttack;

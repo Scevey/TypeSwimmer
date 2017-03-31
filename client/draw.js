@@ -33,18 +33,18 @@ const redraw = (time) => {
   ctx.clearRect(0, 0, 500, 500);
 
   //each user id
-  const keys = Object.keys(squares);
+  const keys = Object.keys(players);
 
   //for each user
   for(let i = 0; i < keys.length; i++) {
-    const square = squares[keys[i]];
+    const player = players[keys[i]];
 
     //if alpha less than 1, increase it by 0.01
-    if(square.alpha < 1) square.alpha += 0.05;
+    if(player.alpha < 1) player.alpha += 0.05;
 
     //applying a filter effect to other characters
     //in order to see our character easily
-    if(square.hash === hash) {
+    if(player.hash === hash) {
       ctx.filter = "none"
     }
     else {
@@ -52,21 +52,21 @@ const redraw = (time) => {
     }
 
     //calculate lerp of the x/y from the destinations
-    square.x = lerp(square.prevX, square.destX, square.alpha);
-    square.y = lerp(square.prevY, square.destY, square.alpha);
+    player.x = lerp(player.prevX, player.destX, player.alpha);
+    player.y = lerp(player.prevY, player.destY, player.alpha);
 
     // if we are mid animation or moving in any direction
-    if(square.frame > 0 || (square.moveUp || square.moveDown || square.moveRight || square.moveLeft)) {
+    if(player.frame > 0 || (player.moveUp || player.moveDown || player.moveRight || player.moveLeft)) {
       //increase our framecount
-      square.frameCount++;
+      player.frameCount++;
 
       //every 8 frames increase which sprite image we draw to animate
       //or reset to the beginning of the animation
-      if(square.frameCount % 8 === 0) {
-        if(square.frame < 7) {
-          square.frame++;
+      if(player.frameCount % 8 === 0) {
+        if(player.frame < 7) {
+          player.frame++;
         } else {
-          square.frame = 0;
+          player.frame = 0;
         }
       }
     }
@@ -74,44 +74,18 @@ const redraw = (time) => {
     //draw our characters
     ctx.drawImage(
       walkImage, 
-      spriteSizes.WIDTH * square.frame,
-      spriteSizes.HEIGHT * square.direction,
+      spriteSizes.WIDTH * player.frame,
+      spriteSizes.HEIGHT * player.direction,
       spriteSizes.WIDTH, 
       spriteSizes.HEIGHT,
-      square.x, 
-      square.y, 
+      player.x, 
+      player.y, 
       spriteSizes.WIDTH, 
       spriteSizes.HEIGHT
     );
     
     //highlight collision box for each character
-    ctx.strokeRect(square.x, square.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);
-  }
-  
-  //for each attack, draw each to the screen
-  for(let i = 0; i < attacks.length; i++) {
-    const attack = attacks[i];
-    
-    //draw the attack image
-    ctx.drawImage(
-      slashImage,
-      attack.x,
-      attack.y,
-      attack.width,
-      attack.height
-    );
-    
-    //count how many times we have drawn this particular attack
-    attack.frames++;
-    
-    //if the attack has been drawn for 30 frames (half a second)
-    //then stop drawing it and remove it from the attacks to draw
-    if(attack.frames > 30) {
-      //remove from our attacks array
-      attacks.splice(i);
-      //decrease i since splice changes the array length
-      i--;
-    }
+    ctx.strokeRect(player.x, player.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);
   }
 
   //set our next animation frame

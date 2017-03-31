@@ -4,12 +4,14 @@ class Character {
     this.hash = hash; // character's unique id
     // last time this character was updated
     this.lastUpdate = new Date().getTime();
-    this.x = 0; // x location of character on screen
-    this.y = 0; // y location of character on screen
-    this.prevX = 0; // last known x location of character
-    this.prevY = 0; // last known y location of character
-    this.destX = 0; // destination x location of character
-    this.destY = 0; // destination y location of character
+    const Xpos = Math.floor(Math.random() * 400);
+    const Ypos = Math.floor(Math.random() * 40);
+    this.x = Xpos; // x location of character on screen
+    this.y = Ypos; // y location of character on screen
+    this.prevX = Xpos; // last known x location of character
+    this.prevY = Ypos; // last known y location of character
+    this.destX = Xpos; // destination x location of character
+    this.destY = Ypos; // destination y location of character
     this.height = 100; // height of character
     this.width = 100; // width of character
     this.alpha = 0; // lerp amount (from prev to dest, 0 to 1)

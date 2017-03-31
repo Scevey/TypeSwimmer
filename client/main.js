@@ -7,56 +7,47 @@ let socket;
 let hash; //user's unique character id (from the server)
 let animationFrame; //our next animation frame function
 
-let squares = {}; //character list
-let attacks = []; //attacks to draw on screen
+let players = {}; //character list
+
 
 //handle for key down events
 const keyDownHandler = (e) => {
   var keyPressed = e.which;
-  const square = squares[hash];
-
+  const player = players[hash];
   // W OR UP
-  if(keyPressed === 87 || keyPressed === 38) {
-    square.moveUp = true;
+  if(keyPressed === 32) { 
+    player.moveUp = true;
   }
   // A OR LEFT
   else if(keyPressed === 65 || keyPressed === 37) {
-    square.moveLeft = true;
-  }
-  // S OR DOWN
-  else if(keyPressed === 83 || keyPressed === 40) {
-    square.moveDown = true;
+    player.moveLeft = true;
   }
   // D OR RIGHT
   else if(keyPressed === 68 || keyPressed === 39) {
-    square.moveRight = true;
+    player.moveRight = true;
   }
 };
-
+const start = (data) => {
+  const player = players[data];
+  player.moveDown = true;
+}
 //handler for key up events
 const keyUpHandler = (e) => {
   var keyPressed = e.which;
-  const square = squares[hash];
+  const player = players[hash];
 
   // W OR UP
-  if(keyPressed === 87 || keyPressed === 38) {
-    square.moveUp = false;
+  if(keyPressed === 32) {
+    player.moveUp = false;
   }
   // A OR LEFT
   else if(keyPressed === 65 || keyPressed === 37) {
-    square.moveLeft = false;
+    player.moveLeft = false;
   }
-  // S OR DOWN
-  else if(keyPressed === 83 || keyPressed === 40) {
-    square.moveDown = false;
-  }
+
   // D OR RIGHT
   else if(keyPressed === 68 || keyPressed === 39) {
-    square.moveRight = false;
-  }
-  //Space key was lifted
-  else if(keyPressed === 32) {
-    sendAttack(); //call to invoke an attack
+    player.moveRight = false;
   }
 };
 
@@ -71,8 +62,6 @@ const init = () => {
 
   socket.on('joined', setUser); //when user joins
   socket.on('updatedMovement', update); //when players move
-  socket.on('attackHit', playerDeath); //when a player dies
-  socket.on('attackUpdate', receiveAttack); //when an attack is sent
   socket.on('left', removeUser); //when a user leaves
 
   document.body.addEventListener('keydown', keyDownHandler);
