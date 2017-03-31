@@ -1,6 +1,10 @@
 {
   "name": "ObjectUpdates",
   "version": "0.0.0",
+  "engines": {
+    "node": "7.1.0",
+    "npm": "3.10.x"
+  },
   "description": "A simple application for updating object properties including falling to the bottom and jumping",
   "main": "./server/app.js",
   "scripts": {
