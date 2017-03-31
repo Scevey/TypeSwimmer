@@ -31,8 +31,7 @@
 </head>
 <body>
     <canvas id="canvas" height="500" width="500">Please use an HTML 5 browser</canvas>
-    <p>This will lag severely when the window is not in focus due to the event loop being drastically slowed.</p>
-    <p>It may also jitter because of inconsistent timing of packets arriving. Some of that has been mitigated by checking the times on packets, but it won't account for any lag, so there might be jitter or jumps. This is avoided with a much more advanced technique called "play out delay", but depending on the implementation, that might be under very heavy patents.</p>
+    <p>This expounds on the class example, adding player falling to the bottom and the ability to jump with spacebar</p>
     <img id="walk" class="hidden" src="/assets/walk.png" alt="walk spritesheet" />
     <img id="slash" class="hidden" src="/assets/slash.png" alt="slash spritesheet" />
 </body>
