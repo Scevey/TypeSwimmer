@@ -1,7 +1,7 @@
 {
   "name": "ObjectUpdates",
   "version": "0.0.0",
-  "description": "A simple application for updating object properties through websockets",
+  "description": "A simple application for updating object properties including falling to the bottom and jumping",
   "main": "./server/app.js",
   "scripts": {
     "build": "babel ./client --out-file ./hosted/compiled.js",
@@ -11,7 +11,7 @@
     "pretest": "eslint ./server --fix",
     "test": "echo \"Tests complete\""
   },
-  "author": "Cody Van De Mark",
+  "author": "Anthony Giallella",
   "license": "ISC",
   "dependencies": {
     "express": "^4.15.2",
