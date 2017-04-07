@@ -58,6 +58,6 @@ server.listen(PORT, (err) => {
   if (err) {
     throw err;
   }
-  console.log(`Listening on port ${PORT}`);
+ // console.log(`Listening on port ${PORT}`);
 });
 

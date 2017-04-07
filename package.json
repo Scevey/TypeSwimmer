@@ -1,11 +1,11 @@
 {
-  "name": "ObjectUpdates",
+  "name": "WebSocketProjectRedeux",
   "version": "0.0.0",
   "engines": {
     "node": "7.1.0",
     "npm": "3.10.x"
   },
-  "description": "A simple application for updating object properties including falling to the bottom and jumping",
+  "description": "A real time multiplayer game that implements some physics/collision",
   "main": "./server/app.js",
   "scripts": {
     "build": "babel ./client --out-file ./hosted/compiled.js",

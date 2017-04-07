@@ -30,7 +30,7 @@ const redraw = (time) => {
   //update this user's positions
   updatePosition();
 
-  ctx.clearRect(0, 0, 500, 500);
+  ctx.clearRect(0, 0, 600, 600);
 
   //each user id
   const keys = Object.keys(players);

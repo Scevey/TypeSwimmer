@@ -1,38 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Lerping Movement</title>
-    <meta charset="utf-8"/>
-    <style>
-      html, body {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding:0;
-      }
-      
-      canvas {
-        margin: 10px;
-        border: 1px solid black;
-      }
-      
-      p {
-        margin-left: 12px;
-        font-size: 1.2em;
-        width: 50%; 
-      }
-      
-      .hidden {
-        display: none;
-      }
-    </style>
-    <script src="/socket.io/socket.io.js"></script>
+	<style>
+.wrap { 
+	width: 900px; 
+	margin: 0 auto; 
+	margin-top: 1%;
+	padding-top: 1%;
+	padding-bottom: 1%;
+	background-color: #ededed;
+}
+#p0,#p1,#p2,#p3{
+	max-width: 400px;
+	max-height:390px;
+}
+#player0,#player1,#player2,#player3{
+	background: #ededed;
+	border: 2px solid;
+}
+.smallerwrap { 
+	width: 500px; 
+	margin: 0 auto; 
+	margin-top: 3%;
+	padding-top: 2%;
+	padding-bottom: 1%;
+	background-color: #ededed;
+}
+body{
+	
+	<!---background-color: #ADD8E6; --> 
+	font-family: tahoma, verdana, sans serif;
+}
+canvas{
+	background-color: rgb(255,255,255);
+}
+#mainCanvas {
+	background: #ffffff;
+	position:absolute;
+	z-index: 0;
+	left: 10px;
+	top: 10px;
+	box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+}
+#controls {
+	position: absolute;
+	z-index: 2;
+	left: 25px;
+	top: 25px;
+	}
+#topCanvas{
+		background: rgba(0,0,0,0);
+		position: absolute;
+		left: 10px;
+		top: 10px;
+		z-index: 1;
+		cursor: pointer;
+	}
+label{
+	font-size: 12px;
+	margin-right:0.75em;
+}
+.title{
+	text-align:center
+}
+.parent {
+	line-height: 2;
+	width: 50%;
+}
+.parent > ul {
+  display: inline-block;
+}
+.lobbyButton{
+    cursor: pointer;
+    cursor: hand; 
+    height: 50px;
+    border-radius: 5px;
+    width: 150px;
+    border-color: rosybrown;
+    color: white;
+    font-weight: 900;
+	border: 3px solid;
+}
+#startButton{
+    cursor: pointer;
+    cursor: hand; 
+    height: 50px;
+    border-radius: 5px;
+    width: 150px;
+    color: white;
+    font-weight: 900;
+	border: 3px solid;
+	background: rgb(47,181,202);
+	margin-left: 40%;   
+	border-color: rosybrown;
+
+}
+#countdown{
+	display:inline;
+	margin-left: 20px;
+}
+#createLobby{
+	margin-left: 13%;
+	background: rgb(47,181,202);
+}
+#joinLobby{
+	margin-left: 190px;
+	 background: rgb(255,89,105);
+}
+#form{
+    float: right;
+    margin-right: 100px;
+}
+#subject,#feed, #chat{
+	border: 3px solid;
+	border-color: brown;
+	background-color: #ededed;
+}
+#subject{
+	border-bottom:0px;
+}
+#player1{
+	border-color: red;
+}
+#player2{
+	border-color: blue;
+}
+#player3{
+	border-color: yellow;
+}
+#player4{
+	border-color: green;
+	margin-left: 20px;
+}
+.chooserBox{
+	padding:3px;
+	margin: 9px;
+}
+#index{
+	border: 3px solid black;
+}
+#wordbox{
+	display: block;
+	z-index: 50;
+	position: absolute;
+	bottom: 50%;
+	left: 37%;
+	padding: 20px;
+	border: 3px solid;
+	border-color: brown;
+}
+.playerBox{
+	padding:3px;
+	margin: 9px;
+	margin: 5px 50px;
+	border: 2px solid black;
+	border-radius: 10px;
+}
+.hidden {
+   display: none;
+ }
+	</style>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
 	<script src="/assets/compiled.js"> </script>
 </head>
-<body>
-    <canvas id="canvas" height="500" width="500">Please use an HTML 5 browser</canvas>
-    <p>This expounds on the class example, adding player falling to the bottom and the ability to jump with spacebar</p>
+<body background="/assets/poly.png">
+<div id="drawer" style="display: none">
+	<div>
+	<div style="padding-top: 100px">
+    <canvas id="canvas" style="margin-left: 25%" height="600" width="600">Please use an HTML 5 browser</canvas>
+	<div style="width: 20%; margin-left: 10px; position: absolute; display: inline-block;">
+			<div style="padding: 5px;height: 100px;" id="subject">
+				<h2>The topic to draw:</h2>
+				<p><span id="topic">Critic is choosing...</span></p>
+			</div>
+			<div style="padding: 5px; height:375px;" id="feed">
+				<h2>The Score Board</h2>
+				<h4>Player 1 </h4>
+				<p>Score: <span id="player0Score">0</span></p>
+				<h4>Player 2 </h4>
+				<p>Score: <span id="player1Score">0</span></p>
+				<h4>Player 3 </h4>
+				<p>Score: <span id="player2Score">0</span></p>
+				<h4>Player 4 </h4>
+				<p>Score: <span id="player3Score">0</span></p>
+
+			</div>
+			<div id="chat" style="height:200px; display: none;">
+					<h4>Stretch Goal.. Chat? </h4>
+			</div>
+		</div>
     <img id="walk" class="hidden" src="/assets/walk.png" alt="walk spritesheet" />
     <img id="slash" class="hidden" src="/assets/slash.png" alt="slash spritesheet" />
+	</div>
+		</div>
+	</div>
+<div id="lobby" style="display: none" class="wrap">
+	<h2 style="margin-top: 0px" class="title">Game Lobby (<span id="status">Waiting...</span>)</h2>
+	<h2 style="margin-top: 0px" class="title">Room Code (<span id="roomCode">Waiting...</span>)</h2>
+	<div style="padding:20px; padding-top: 10px;">
+		<div class="playerBox" style="background: lightgreen">
+			<div id="player0box">
+				<h2 class="title"> Player 1 <h2>
+				<p class="title">Status: <span id="player0Status">Waiting...</span></p>
+			</div>
+		</div>
+		<div class="playerBox"style="background: lightyellow">
+			<div id="player1box">
+				<h2 class="title"> Player 2 <h2>
+				<p class="title">Status: <span id="player1Status">Waiting...</span></p>
+			</div>
+		</div>
+		<button style="display:none;" id="startButton" onclick="gameStart()">Start Game</button>
+	</div>
+</div>
+<div id="index" class="wrap">
+	<h1 class="title">Title TBD</h1>
+	<h2 class="title">"Tag Line TBD"</h2>
+	<button class="lobbyButton"id= 'createLobby'>Create New Lobby</button>
+	<button class="lobbyButton"id= 'joinLobby' >Join in with a Friend</button>
+	<form id="form">
+	Lobby Name:<br>
+	<input id="lobbyName" type="text" name="lobbyName">
+	</form>
+	<div height="600" width="400" style="background-color: white">
+	</div>
+	<div class="parent" style="float:right; margin-top: 20px; ">
+		<img src="/assets/controls.png">
+	</div>
+	<div style="margin-top: 10px; margin-bottom: 20px; margin-left: 100px" class="parent">
+		<ul style="font-weight: 900">
+		<li>2 Players per Game</li>
+		<li>Fight in the arena</li>
+		<li>Last one standing wins</li>
+		</ul>
+	</div>
+</div>
+<div id="win" style="display:none"class="wrap">
+	<h1 class="title">Game Over!</h1>
+	<h2 class="title" id="winmessage"></h2>
+</div>
 </body>
 </html>
