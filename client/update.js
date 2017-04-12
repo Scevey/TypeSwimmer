@@ -41,7 +41,28 @@ const removeUser = (data) => {
     delete players[data.hash];
   }
 };
+const receiveAttack = (data) => {
+  attacks.push(data);
+};
 
+const sendAttack = () => {
+  const attacker = players[hash];
+
+  const attack = {
+    hash: hash,
+    room: roomCode,
+    x: attacker.x,
+    y: attacker.y,
+    direction: attacker.direction,
+    frames: 0,
+    frame: 0
+  };
+  var data = {
+    attack: attack,
+    room: roomCode
+  };
+  socket.emit('attack', data);
+};
 
 //when a character is killed
 const playerDeath = (data) => {
@@ -80,7 +101,7 @@ const updatePosition = () => {
     }
   
   if(player.moveUp && player.destY > 0) {
-    square.destY -= 2;
+    player.destY -= 2;
   }
   //if user is moving down, increase y
   if(player.moveDown && player.destY < 480) {

@@ -1,7 +1,8 @@
 // Character class
 class Character {
-  constructor(hash) {
-    this.hash = hash; // character's unique id
+  constructor(data) {
+    this.hash = data.hash; // character's unique id
+    this.room = data.room;
     // last time this character was updated
     this.lastUpdate = new Date().getTime();
     const Xpos = Math.floor(Math.random() * 400);

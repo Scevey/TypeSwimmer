@@ -14,10 +14,14 @@ const directions = {
 
 //size of our character sprites
 const spriteSizes = {
-  WIDTH: 61,
-  HEIGHT: 121
+  WIDTH: 46,
+  HEIGHT: 91
 };
-
+const bombSizes = {
+  WIDTH: 32,
+  HEIGHT: 32,
+  OFF: 16
+}
 //function to lerp (linear interpolation)
 //Takes position one, position two and the 
 //percentage of the movement between them (0-1)
@@ -31,7 +35,7 @@ const redraw = (time) => {
   updatePosition();
 
   ctx.clearRect(0, 0, 600, 600);
-
+  ctx.drawImage(mapImage,0,0,600,600);
   //each user id
   const keys = Object.keys(players);
 
@@ -45,7 +49,7 @@ const redraw = (time) => {
     //applying a filter effect to other characters
     //in order to see our character easily
     if(player.hash === hash) {
-      ctx.filter = "none"
+      ctx.filter = "none";
     }
     else {
       ctx.filter = "hue-rotate(40deg)";
@@ -85,9 +89,44 @@ const redraw = (time) => {
     );
     
     //highlight collision box for each character
-    ctx.strokeRect(player.x, player.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);
+    ctx.strokeRect(player.x, player.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);      
+    ctx.filter = "none";
   }
+  for (var _i = 0; _i < attacks.length; _i++) {
+    var attack = attacks[_i];
+      //increase our framecount
 
+      //every 8 frames increase which sprite image we draw to animate
+      //or reset to the beginning of the animation
+      if(attack.frames % 16 === 0) {
+        if(attack.frame <= 7) {
+          attack.frame++;
+        }
+        else {
+          attack.frame = 1;
+        }
+      }
+    attack.frames++;
+    if(attack.frame == 7){
+          ctx.drawImage(bombImage, 444 , 159, bombSizes.WIDTH, bombSizes.HEIGHT, attack.x, attack.y, attack.width, attack.height);
+    }
+    else if(attack.frame == 8){ 
+        ctx.drawImage(bombImage, 452 , 5, 19, 88, attack.x + 4, attack.y - 30, 19 , 88 );
+        ctx.drawImage(bombImage, 5 , 159, 119, bombSizes.HEIGHT, attack.x + bombSizes.OFF - 75, attack.y, 119 , attack.height);
+      
+    }
+    else{
+     
+          ctx.drawImage(bombImage, (bombSizes.WIDTH * attack.frame) + 94 , 159, bombSizes.WIDTH, bombSizes.HEIGHT, attack.x, attack.y, attack.width, attack.height);
+    }
+
+
+
+    if (attack.frames > 127) {
+      attacks.splice(_i);
+      _i--;
+    }
+  }
   //set our next animation frame
   animationFrame = requestAnimationFrame(redraw);
 };

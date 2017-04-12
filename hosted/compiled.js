@@ -16,10 +16,14 @@ var directions = {
 
 //size of our character sprites
 var spriteSizes = {
-  WIDTH: 61,
-  HEIGHT: 121
+  WIDTH: 46,
+  HEIGHT: 91
 };
-
+var bombSizes = {
+  WIDTH: 32,
+  HEIGHT: 32,
+  OFF: 16
+};
 //function to lerp (linear interpolation)
 //Takes position one, position two and the 
 //percentage of the movement between them (0-1)
@@ -33,7 +37,7 @@ var redraw = function redraw(time) {
   updatePosition();
 
   ctx.clearRect(0, 0, 600, 600);
-
+  ctx.drawImage(mapImage, 0, 0, 600, 600);
   //each user id
   var keys = Object.keys(players);
 
@@ -77,8 +81,37 @@ var redraw = function redraw(time) {
 
     //highlight collision box for each character
     ctx.strokeRect(player.x, player.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);
+    ctx.filter = "none";
   }
+  for (var _i = 0; _i < attacks.length; _i++) {
+    var attack = attacks[_i];
+    //increase our framecount
 
+    //every 8 frames increase which sprite image we draw to animate
+    //or reset to the beginning of the animation
+    if (attack.frames % 16 === 0) {
+      if (attack.frame <= 7) {
+        attack.frame++;
+      } else {
+        attack.frame = 1;
+      }
+    }
+    attack.frames++;
+    if (attack.frame == 7) {
+      ctx.drawImage(bombImage, 444, 159, bombSizes.WIDTH, bombSizes.HEIGHT, attack.x, attack.y, attack.width, attack.height);
+    } else if (attack.frame == 8) {
+      ctx.drawImage(bombImage, 452, 5, 19, 88, attack.x + 4, attack.y - 30, 19, 88);
+      ctx.drawImage(bombImage, 5, 159, 119, bombSizes.HEIGHT, attack.x + bombSizes.OFF - 75, attack.y, 119, attack.height);
+    } else {
+
+      ctx.drawImage(bombImage, bombSizes.WIDTH * attack.frame + 94, 159, bombSizes.WIDTH, bombSizes.HEIGHT, attack.x, attack.y, attack.width, attack.height);
+    }
+
+    if (attack.frames > 127) {
+      attacks.splice(_i);
+      _i--;
+    }
+  }
   //set our next animation frame
   animationFrame = requestAnimationFrame(redraw);
 };
@@ -158,6 +191,8 @@ var canvas = void 0;
 var ctx = void 0;
 var walkImage = void 0; //spritesheet for character
 var slashImage = void 0; //image for attack
+var mapImage = void 0;
+var bombImage = void 0;
 //our websocket connection 
 var socket = void 0;
 var hash = void 0; //user's unique character id (from the server)
@@ -167,6 +202,7 @@ var playernumber = void 0;
 var numPlayers = void 0;
 var chosen = void 0;
 var roomCode = void 0;
+var attacks = [];
 var players = {}; //character list
 var num = 0;
 
@@ -202,7 +238,8 @@ var keyUpHandler = function keyUpHandler(e) {
 
   // Space
   if (keyPressed === 32) {
-    player.jump = true;
+    //player.jump = true;
+    sendAttack();
   }
   //W or UP
   else if (keyPressed === 87 || keyPressed === 38) {
@@ -224,6 +261,8 @@ var keyUpHandler = function keyUpHandler(e) {
 
 var init = function init() {
   walkImage = document.querySelector('#walk');
+  bombImage = document.querySelector('#bomb');
+  mapImage = document.querySelector('#map');
   slashImage = document.querySelector('#slash');
   document.querySelector('#joinLobby').onclick = join;
   document.querySelector('#createLobby').onclick = create;
@@ -245,9 +284,10 @@ var init = function init() {
   socket.on('joined', playerJoin);
   //socket.on('gameStart', gameStart);
   //socket.on('drawend', snapshot);
-  //socket.on('scorereset',doClear);
-  //socket.on('scoreupdate',scoreUpdate);
+  socket.on('attackHit', playerDeath); //when a player dies
+  socket.on('attackUpdate', receiveAttack); //when an attack is sent
   socket.on('showStart', showStart);
+  //socket.on('movementUpdate', movementUpdate);
   //chooser responses
   //socket.on('addChoice',addChoice);
   //socket.on('reset',doReset);
@@ -256,81 +296,6 @@ var init = function init() {
 };
 
 window.onload = init;
-'use strict';
-
-var attacks = [];
-
-var checkCollisions = function checkCollisions(rect1, rect2, width, height) {
-  if (rect1.x < rect2.x + width && rect1.x + width > rect2.x && rect1.y < rect2.y + height && height + rect1.y > rect2.y) {
-    return true;
-  }
-  return false;
-};
-
-var checkAttackCollision = function checkAttackCollision(character, attackObj) {
-  var attack = attackObj;
-
-  if (character.hash === attack.hash) {
-    return false;
-  }
-
-  return checkCollisions(character, attack, attack.width, attack.height);
-};
-
-var checkAttacks = function checkAttacks() {
-  if (attacks.length > 0) {
-    var keys = Object.keys(hosted);
-    var characters = hosted;
-
-    for (var i = 0; i < attacks.length; i++) {
-      for (var k = 0; k < keys.length; k++) {
-        var char1 = characters[keys[k]];
-
-        var hit = checkAttackCollision(char1, attacks[i]);
-
-        if (hit) {
-          socket.emit('removePlayer', char1.hash);
-          delete hosted[char1.hash];
-          delete squares[char1.hash];
-
-          if (hash === char1.hash) {
-            var square = {};
-            square.hash = hash;
-            square.lastUpdate = new Date().getTime();
-            square.x = 0;
-            square.y = 0;
-            square.prevX = 0;
-            square.prevY = 0;
-            square.destX = 0;
-            square.destY = 0;
-            square.height = 100;
-            square.width = 100;
-            square.alpha = 0;
-            square.direction = 0;
-            square.frame = 0;
-            square.frameCount = 0;
-            square.moveLeft = false;
-            square.moveRight = false;
-            square.moveDown = false;
-            square.moveUp = false;
-
-            hosted[hash] = square;
-            squares[hash] = square;
-          }
-        } else {
-          console.log('miss');
-        }
-      }
-
-      attacks.splice(i);
-      i--;
-    }
-  }
-};
-
-var addAttack = function addAttack(attack) {
-  attacks.push(attack);
-};
 'use strict';
 
 //when we receive a character update
@@ -376,6 +341,28 @@ var removeUser = function removeUser(data) {
     delete players[data.hash];
   }
 };
+var receiveAttack = function receiveAttack(data) {
+  attacks.push(data);
+};
+
+var sendAttack = function sendAttack() {
+  var attacker = players[hash];
+
+  var attack = {
+    hash: hash,
+    room: roomCode,
+    x: attacker.x,
+    y: attacker.y,
+    direction: attacker.direction,
+    frames: 0,
+    frame: 0
+  };
+  var data = {
+    attack: attack,
+    room: roomCode
+  };
+  socket.emit('attack', data);
+};
 
 //when a character is killed
 var playerDeath = function playerDeath(data) {
@@ -410,10 +397,11 @@ var updatePosition = function updatePosition() {
   //if user is jumping up, decrease y
   if (player.jump) {
     player.destY -= 40;
-    player.jump = false;
+    player.fall = true;
   }
+
   if (player.moveUp && player.destY > 0) {
-    square.destY -= 2;
+    player.destY -= 2;
   }
   //if user is moving down, increase y
   if (player.moveDown && player.destY < 480) {
