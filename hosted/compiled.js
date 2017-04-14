@@ -19,6 +19,7 @@ var spriteSizes = {
   WIDTH: 46,
   HEIGHT: 91
 };
+//size of bomb sprites
 var bombSizes = {
   WIDTH: 32,
   HEIGHT: 32,
@@ -103,7 +104,7 @@ var redraw = function redraw(time) {
   }
   for (var _i = 0; _i < attacks.length; _i++) {
     var attack = attacks[_i];
-    //every 8 frames increase which sprite image we draw to animate
+    //every 16 frames increase which sprite image we draw to animate
     //or reset to the beginning of the animation
     if (attack.frames % 16 === 0) {
       if (attack.frame <= 6) {
@@ -113,17 +114,12 @@ var redraw = function redraw(time) {
       }
     }
     attack.frames++;
-    // if(attack.frame == 7){
-    //      ctx.drawImage(bombImage, 444 , 159, bombSizes.WIDTH, bombSizes.HEIGHT, attack.x, attack.y, attack.width, attack.height);
-    // }
     if (attack.frame == 7) {
       if (host == true && attack.frames == 110) {
         addAttack(attack);
       }
       ctx.drawImage(bombImage, 452, 5, 19, 88, attack.x + 4, attack.y - 30, 19, 88);
       ctx.drawImage(bombImage, 5, 162, 119, bombSizes.HEIGHT, attack.x + bombSizes.OFF - 75, attack.y, 119, attack.height);
-      console.log(attack.x + 4);
-      console.log(attack.y - 30);
     } else {
 
       ctx.drawImage(bombImage, bombSizes.WIDTH * attack.frame + 94, 162, bombSizes.WIDTH, bombSizes.HEIGHT, attack.x, attack.y, attack.width, attack.height);
@@ -139,6 +135,7 @@ var redraw = function redraw(time) {
 };
 'use strict';
 
+//show lobby stuff
 var readyUp = function readyUp(data) {
   document.getElementById('roomCode').textContent = data.room;
   roomCode = data.room;
@@ -157,12 +154,14 @@ var readyUp = function readyUp(data) {
     socket.emit('setup', { room: roomCode });
   }
 };
+//update lobby
 var playerJoin = function playerJoin(data) {
   var temp = numPlayers.toString();
   var playerID = 'player' + temp + 'Status';
   document.getElementById(playerID).textContent = "In Lobby";
   numPlayers++;
 };
+//join a lobby
 var join = function join() {
   var roomname = document.getElementById('lobbyName').value;
   if (roomname === "") {
@@ -173,14 +172,17 @@ var join = function join() {
   };
   socket.emit('join', data);
 };
+//create a lobby, become host
 var create = function create() {
   socket.emit('create');
   host = true;
 };
+//show start button
 var showStart = function showStart() {
   document.getElementById('startButton').style.display = 'block';
   document.getElementById('status').textContent = "Room Full!";
 };
+//get game started
 var gameStart = function gameStart(e) {
   var data = {
     room: roomCode
@@ -188,6 +190,7 @@ var gameStart = function gameStart(e) {
 
   socket.emit('gameStart', data);
 };
+// set spawns and start animating
 var getGameReady = function getGameReady(data) {
   var tempP = data;
   num++;
@@ -347,13 +350,14 @@ var init = function init() {
   socket.on('gameStart', getPlayer); //when user joins
   socket.on('addPlayer', getGameReady); //when user joins
   socket.on('updatedMovement', update); //when players move
-  socket.on('left', removeUser); //when a user leaves
-  socket.on('winner', win);
-  socket.on('lobby', readyUp);
-  socket.on('joined', playerJoin);
+  socket.on('left', lose); //when a user leaves
+  socket.on('winner', win); //win msg
+  socket.on('loser', lose); //lose msg
+  socket.on('lobby', readyUp); //lobby setup
+  socket.on('joined', playerJoin); //join lobby
   socket.on('attackHit', playerHit); //when a player dies
   socket.on('attackUpdate', receiveAttack); //when an attack is sent
-  socket.on('showStart', showStart);
+  socket.on('showStart', showStart); //show start
   document.body.addEventListener('keydown', keyDownHandler);
   document.body.addEventListener('keyup', keyUpHandler);
 };
@@ -390,7 +394,6 @@ var checkAttackCollision = function checkAttackCollision(character, attackObj) {
     //    attack.y = attack.y - 44;
     var up = checkCollisions(character, attack, spriteSizes.WIDTH, spriteSizes.HEIGHT, attack.explosion1W, attack.explosion1Y);
     if (up == true) {
-      // console.log('up');    
       return true;
     }
   }
@@ -401,7 +404,6 @@ var checkAttackCollision = function checkAttackCollision(character, attackObj) {
     attack.x = attack.x + 59;
     var right = checkCollisions(character, attack, spriteSizes.WIDTH, spriteSizes.HEIGHT, attack.explosion2W, attack.height);
     if (right == true) {
-      //    console.log('right');
       return true;
     }
   }
@@ -412,7 +414,6 @@ var checkAttackCollision = function checkAttackCollision(character, attackObj) {
     attack.y = attack.y + 44;
     var down = checkCollisions(character, attack, spriteSizes.WIDTH, spriteSizes.HEIGHT, attack.explosion1W, attack.explosion1Y);
     if (down == true) {
-      //console.log('down');
       return true;
     }
   }
@@ -422,7 +423,6 @@ var checkAttackCollision = function checkAttackCollision(character, attackObj) {
     attack.x = attack.x - 59;
     var left = checkCollisions(character, attack, spriteSizes.WIDTH, spriteSizes.HEIGHT, attack.explosion2W, attack.height);
     if (left == true) {
-      //console.log('left');
       return true;
     }
   } else {
@@ -455,12 +455,8 @@ var checkAttacks = function checkAttacks() {
             room: roomCode
           };
           socket.emit('handleAttack', data);
-          console.log('hit');
           // kill that character and remove from our user list
           //delete charList[char1.hash];
-        } else {
-          // if not a hit
-          console.log('miss');
         }
       }
 
@@ -521,18 +517,12 @@ var update = function update(data) {
   player.alpha = 0.05;
 };
 
-//function to remove a character from our character list
-var removeUser = function removeUser(data) {
-  //if we have that character, remove them
-  if (players[data]) {
-    delete players[data];
-    requestAnimationFrame(redraw);
-  }
-};
+//add attack
 var receiveAttack = function receiveAttack(data) {
   attacks.push(data);
 };
 
+//send attack 
 var sendAttack = function sendAttack() {
   if (bomb == true) {
     var attacker = players[hash];
@@ -572,7 +562,6 @@ var playerDeath = function playerDeath(data) {
   //if the character killed is our character
   //then disconnect and draw a game over screen
   if (data === hash) {
-    socket.disconnect();
     cancelAnimationFrame(animationFrame);
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, 600, 600);
@@ -587,23 +576,32 @@ var playerDeath = function playerDeath(data) {
       player: winner[0]
     };
     socket.emit('playerWin', outdata);
-    console.log('win');
   }
 };
+//handle hit by attack
 var playerHit = function playerHit(data) {
   //remove the character
   players[data].hp--;
-
-  console.log(players[data].hp);
   if (players[data].hp == 0) {
     playerDeath(data);
   }
-  //if the character killed is our character
-  //then disconnect and draw a game over screen
 };
 var win = function win() {
   //winner    
-  console.log('wineee');
+  socket.emit('disconnect');
+  socket.disconnect();
+  cancelAnimationFrame(animationFrame);
+  ctx.clearRect(0, 0, 600, 600);
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, 600, 600);
+  ctx.fillStyle = 'white';
+  ctx.font = '48px serif';
+  ctx.fillText('You Won!', 250, 300);
+};
+var lose = function lose() {
+  //loser    
+  socket.emit('disconnect');
+  socket.disconnect();
   cancelAnimationFrame(animationFrame);
   ctx.clearRect(0, 0, 600, 600);
   ctx.fillStyle = "black";
