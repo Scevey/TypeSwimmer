@@ -562,6 +562,7 @@ var playerDeath = function playerDeath(data) {
   //if the character killed is our character
   //then disconnect and draw a game over screen
   if (data === hash) {
+    socket.disconnect();
     cancelAnimationFrame(animationFrame);
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, 600, 600);
@@ -589,7 +590,7 @@ var playerHit = function playerHit(data) {
 var win = function win() {
   //winner    
   socket.emit('disconnect');
-  socket.disconnect();
+
   cancelAnimationFrame(animationFrame);
   ctx.clearRect(0, 0, 600, 600);
   ctx.fillStyle = "black";
@@ -601,6 +602,7 @@ var win = function win() {
 var lose = function lose() {
   //loser    
   socket.emit('disconnect');
+  delete players[hash];
   socket.disconnect();
   cancelAnimationFrame(animationFrame);
   ctx.clearRect(0, 0, 600, 600);
@@ -608,7 +610,7 @@ var lose = function lose() {
   ctx.fillRect(0, 0, 600, 600);
   ctx.fillStyle = 'white';
   ctx.font = '48px serif';
-  ctx.fillText('You Won!', 250, 300);
+  ctx.fillText('You Lost!', 250, 300);
 };
 //update this user's positions based on keyboard input
 var updatePosition = function updatePosition() {
