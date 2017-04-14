@@ -89,13 +89,13 @@ const init = () => {
   socket.on('addPlayer', getGameReady); //when user joins
   socket.on('updatedMovement', update); //when players move
   socket.on('left', lose); //when a user leaves
-  socket.on('winner', win);
-  socket.on('loser', lose);
-	socket.on('lobby', readyUp);
-	socket.on('joined', playerJoin);
+  socket.on('winner', win);//win msg
+  socket.on('loser', lose);//lose msg
+	socket.on('lobby', readyUp);//lobby setup
+	socket.on('joined', playerJoin);//join lobby
   socket.on('attackHit', playerHit); //when a player dies
   socket.on('attackUpdate', receiveAttack); //when an attack is sent
-	socket.on('showStart',showStart);
+	socket.on('showStart',showStart); //show start
   document.body.addEventListener('keydown', keyDownHandler);
   document.body.addEventListener('keyup', keyUpHandler);
   

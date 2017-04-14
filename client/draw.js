@@ -17,6 +17,7 @@ const spriteSizes = {
   WIDTH: 46,
   HEIGHT: 91
 };
+//size of bomb sprites
 const bombSizes = {
   WIDTH: 32,
   HEIGHT: 32,

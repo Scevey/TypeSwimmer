@@ -38,12 +38,12 @@ const setupSockets = (ioServer) => {
       const room = data.room;
 
       if (!rooms[room]) {
-        socket.emit('error', 'Sorry that room doesnt exist');
+      //  socket.emit('error', 'Sorry that room doesnt exist');
         return;
       }
       const length = io.sockets.adapter.rooms[room];
       if (length.length >= 4) {
-        socket.emit('error', 'Sorry room is full');
+       // socket.emit('error', 'Sorry room is full');
         return;
       }
       const player = xxh.h32(`${socket.id}${new Date().getTime()}`, 0xCAFEBABE).toString(16);

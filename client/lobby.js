@@ -1,4 +1,5 @@
-		const readyUp = (data) =>{
+	//show lobby stuff
+	const readyUp = (data) =>{
 			document.getElementById('roomCode').textContent=data.room;
 			roomCode = data.room;
 			playernumber = data.length-1;
@@ -16,6 +17,7 @@
 				socket.emit('setup',{room: roomCode});
 			}
 		}
+    //update lobby
 		const playerJoin = (data)=>{
 			var temp = (numPlayers).toString();
 			var playerID = 'player'+temp+'Status';
@@ -23,6 +25,7 @@
 			numPlayers++;
 
 		}
+    //join a lobby
 		const join = ()=>{
 			var roomname = document.getElementById('lobbyName').value;
 			if(roomname === ""){
@@ -33,14 +36,17 @@
 			};
 			socket.emit('join', data);
 		}
+    //create a lobby, become host
 		const create = ()=>{
 			socket.emit('create');
       host = true;
 		}
+    //show start button
 		const showStart = ()=>{
 			document.getElementById('startButton').style.display = 'block';
 			document.getElementById('status').textContent = "Room Full!";
 		}
+    //get game started
 		const gameStart = (e)=>{
     var data = {
       room: roomCode,
@@ -49,6 +55,7 @@
 
 			socket.emit('gameStart', data);
 		}
+    // set spawns and start animating
     const getGameReady = (data)=>{
         let tempP = data;
         num++;        

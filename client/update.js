@@ -34,10 +34,12 @@ const update = (data) => {
   player.alpha = 0.05;
 };
 
+//add attack
 const receiveAttack = (data) => {
   attacks.push(data);
 };
 
+//send attack 
 const sendAttack = () => {
   if(bomb == true){
   const attacker = players[hash];
@@ -93,14 +95,13 @@ const playerDeath = (data) => {
     socket.emit('playerWin', outdata);
   }
 };
+//handle hit by attack
 const playerHit = (data) => {
   //remove the character
     players[data].hp --;
     if(players[data].hp == 0){
       playerDeath(data);
     }
-  //if the character killed is our character
-  //then disconnect and draw a game over screen
   
 };
 const win = () => {
