@@ -41,9 +41,9 @@ const receiveAttack = (data) => {
 
 //send attack 
 const sendAttack = () => {
-  if(bomb == true){
-  const attacker = players[hash];
 
+  const attacker = players[hash];
+  //if(attacker.bomb == true){
   const attack = {
     hash: hash,
     room: roomCode,
@@ -66,8 +66,8 @@ const sendAttack = () => {
     room: roomCode
   };
   socket.emit('attack', data);
-  bomb = false;
-  }
+  //players[hash].bomb = false;
+ // }
 };
 
 //when a character is killed

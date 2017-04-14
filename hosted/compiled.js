@@ -385,7 +385,7 @@ var checkAttackCollision = function checkAttackCollision(character, attackObj) {
 
   // if attacking themselves, we won't check collision
   if (character.hash === attack.hash) {
-    bomb = true;
+    //players[character.hash].bomb = true;
     return false;
   }
   if (attack.up == true) {
@@ -524,33 +524,33 @@ var receiveAttack = function receiveAttack(data) {
 
 //send attack 
 var sendAttack = function sendAttack() {
-  if (bomb == true) {
-    var attacker = players[hash];
 
-    var attack = {
-      hash: hash,
-      room: roomCode,
-      x: attacker.x,
-      y: attacker.y,
-      explosion1W: 19,
-      explosion1Y: 44,
-      explosion2W: 59,
-      explosion2Y: 32,
-      direction: attacker.direction,
-      up: true,
-      down: true,
-      left: true,
-      right: true,
-      frames: 0,
-      frame: 0
-    };
-    var data = {
-      attack: attack,
-      room: roomCode
-    };
-    socket.emit('attack', data);
-    bomb = false;
-  }
+  var attacker = players[hash];
+  //if(attacker.bomb == true){
+  var attack = {
+    hash: hash,
+    room: roomCode,
+    x: attacker.x,
+    y: attacker.y,
+    explosion1W: 19,
+    explosion1Y: 44,
+    explosion2W: 59,
+    explosion2Y: 32,
+    direction: attacker.direction,
+    up: true,
+    down: true,
+    left: true,
+    right: true,
+    frames: 0,
+    frame: 0
+  };
+  var data = {
+    attack: attack,
+    room: roomCode
+  };
+  socket.emit('attack', data);
+  //players[hash].bomb = false;
+  // }
 };
 
 //when a character is killed

@@ -29,6 +29,7 @@ class Character {
     this.down = false;
     this.left = false;
     this.right = false;
+    this.bomb = true;
   }
 }
 

@@ -21,7 +21,7 @@ const checkAttackCollision = (character, attackObj) => {
   
   // if attacking themselves, we won't check collision
   if (character.hash === attack.hash) {
-    bomb = true;
+    //players[character.hash].bomb = true;
     return false;
   }
   if(attack.up == true){
