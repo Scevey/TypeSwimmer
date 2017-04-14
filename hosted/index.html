@@ -168,28 +168,7 @@ label{
 <div id="drawer" style="display: none">
 	<div>
 	<div style="padding-top: 100px">
-    <canvas id="canvas" style="margin-left: 25%" height="600" width="600">Please use an HTML 5 browser</canvas>
-	<div style="width: 20%; margin-left: 10px; position: absolute; display: inline-block;">
-			<div style="padding: 5px;height: 100px;" id="subject">
-				<h2>The topic to draw:</h2>
-				<p><span id="topic">Critic is choosing...</span></p>
-			</div>
-			<div style="padding: 5px; height:375px;" id="feed">
-				<h2>The Score Board</h2>
-				<h4>Player 1 </h4>
-				<p>Score: <span id="player0Score">0</span></p>
-				<h4>Player 2 </h4>
-				<p>Score: <span id="player1Score">0</span></p>
-				<h4>Player 3 </h4>
-				<p>Score: <span id="player2Score">0</span></p>
-				<h4>Player 4 </h4>
-				<p>Score: <span id="player3Score">0</span></p>
-
-			</div>
-			<div id="chat" style="height:200px; display: none;">
-					<h4>Stretch Goal.. Chat? </h4>
-			</div>
-		</div>
+    <canvas id="canvas" style="margin-left: 35%" height="600" width="600">Please use an HTML 5 browser</canvas>
     <img id="walk" class="hidden" src="/assets/walk.png" alt="walk spritesheet" />
     <img id="slash" class="hidden" src="/assets/slash.png" alt="slash spritesheet" />
     <img id="map" class="hidden" src="/assets/bombbackground.png" alt="slash spritesheet" />
@@ -213,12 +192,24 @@ label{
 				<p class="title">Status: <span id="player1Status">Waiting...</span></p>
 			</div>
 		</div>
+		<div class="playerBox"style="background: lightsalmon">
+			<div id="player2box">
+				<h2 class="title"> Player 3 <h2>
+				<p class="title">Status: <span id="player2Status">Waiting...</span></p>
+			</div>
+		</div>
+		<div class="playerBox"style="background: lightsteelblue">
+			<div id="player3box">
+				<h2 class="title"> Player 4 <h2>
+				<p class="title">Status: <span id="player3Status">Waiting...</span></p>
+			</div>
+		</div>
 		<button style="display:none;" id="startButton" onclick="gameStart()">Start Game</button>
 	</div>
 </div>
 <div id="index" class="wrap">
-	<h1 class="title">Title TBD</h1>
-	<h2 class="title">"Tag Line TBD"</h2>
+	<h1 class="title">Splode your Friends</h1>
+	<h2 class="title">"Bomberman without all those pesky extra features"</h2>
 	<button class="lobbyButton"id= 'createLobby'>Create New Lobby</button>
 	<button class="lobbyButton"id= 'joinLobby' >Join in with a Friend</button>
 	<form id="form">
@@ -232,8 +223,8 @@ label{
 	</div>
 	<div style="margin-top: 10px; margin-bottom: 20px; margin-left: 100px" class="parent">
 		<ul style="font-weight: 900">
-		<li>2 Players per Game</li>
-		<li>Fight in the arena</li>
+		<li>4 Players per Game</li>
+		<li>Plant bombs around the arena</li>
 		<li>Last one standing wins</li>
 		</ul>
 	</div>

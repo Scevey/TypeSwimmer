@@ -10,13 +10,15 @@ let hash; //user's unique character id (from the server)
 let animationFrame; //our next animation frame function
 let imgArr;
 let playernumber;
+let host = false;
 let numPlayers;
 let chosen;
 let roomCode;
 let attacks = []; 
+let liveAttacks = []; 
 let players = {}; //character list
 let num = 0;
-
+let bomb = true;
 //handle for key down events
 const keyDownHandler = (e) => {
   var keyPressed = e.which;
@@ -53,7 +55,7 @@ const keyUpHandler = (e) => {
     sendAttack();
   }
   //W or UP
-  else if(keyPressed === 87 || keyPressed === 38) {
+  if(keyPressed === 87 || keyPressed === 38) {
     player.moveUp = false;
   }
   // A OR LEFT
@@ -86,22 +88,14 @@ const init = () => {
   socket.on('gameStart', getPlayer); //when user joins
   socket.on('addPlayer', getGameReady); //when user joins
   socket.on('updatedMovement', update); //when players move
-  socket.on('left', removeUser); //when a user leaves
-	//socket.on('getRole', getRole);
-	//socket.on('role', getGameReady);
-	//socket.on('showwords', showWords);
-	//socket.on('word', countDown);
+  socket.on('left', lose); //when a user leaves
+  socket.on('winner', win);
+  socket.on('loser', lose);
 	socket.on('lobby', readyUp);
 	socket.on('joined', playerJoin);
-	//socket.on('gameStart', gameStart);
-  //socket.on('drawend', snapshot);
-  socket.on('attackHit', playerDeath); //when a player dies
+  socket.on('attackHit', playerHit); //when a player dies
   socket.on('attackUpdate', receiveAttack); //when an attack is sent
 	socket.on('showStart',showStart);
-  //socket.on('movementUpdate', movementUpdate);
-  //chooser responses
-  //socket.on('addChoice',addChoice);
-	//socket.on('reset',doReset);
   document.body.addEventListener('keydown', keyDownHandler);
   document.body.addEventListener('keyup', keyUpHandler);
   

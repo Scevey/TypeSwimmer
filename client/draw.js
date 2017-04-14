@@ -38,7 +38,6 @@ const redraw = (time) => {
   ctx.drawImage(mapImage,0,0,600,600);
   //each user id
   const keys = Object.keys(players);
-
   //for each user
   for(let i = 0; i < keys.length; i++) {
     const player = players[keys[i]];
@@ -88,18 +87,36 @@ const redraw = (time) => {
       spriteSizes.HEIGHT
     );
     
+    let mod1;
+    if(player.hp == 4){
+      mod1 = 1;
+    }
+    if(player.hp == 3){
+      mod1 = .75;
+    }    
+    if(player.hp == 2){
+      mod1 = .5;
+    }  
+    if(player.hp == 1){
+      mod1 = .25;
+    }
+     ctx.filter = "none";
     //highlight collision box for each character
-    ctx.strokeRect(player.x, player.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);      
-    ctx.filter = "none";
+   // ctx.strokeRect(player.x, player.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);
+
+     ctx.strokeRect(player.x + 5, player.y + 5, spriteSizes.WIDTH - 5, 10);
+     ctx.fillStyle = "#ff0000";
+     ctx.fillRect(player.x + 5, player.y + 6, 41, 8);
+     ctx.fillStyle = "#00ff00";
+     ctx.fillRect(player.x+ 5, player.y + 6,  mod1 * 41, 8);  
+
   }
   for (var _i = 0; _i < attacks.length; _i++) {
     var attack = attacks[_i];
-      //increase our framecount
-
-      //every 8 frames increase which sprite image we draw to animate
+      //every 16 frames increase which sprite image we draw to animate
       //or reset to the beginning of the animation
       if(attack.frames % 16 === 0) {
-        if(attack.frame <= 7) {
+        if(attack.frame <= 6) {
           attack.frame++;
         }
         else {
@@ -107,22 +124,21 @@ const redraw = (time) => {
         }
       }
     attack.frames++;
-    if(attack.frame == 7){
-          ctx.drawImage(bombImage, 444 , 159, bombSizes.WIDTH, bombSizes.HEIGHT, attack.x, attack.y, attack.width, attack.height);
+    if(attack.frame == 7){ 
+    if(host == true && attack.frames == 110){
+         addAttack(attack);
     }
-    else if(attack.frame == 8){ 
         ctx.drawImage(bombImage, 452 , 5, 19, 88, attack.x + 4, attack.y - 30, 19 , 88 );
-        ctx.drawImage(bombImage, 5 , 159, 119, bombSizes.HEIGHT, attack.x + bombSizes.OFF - 75, attack.y, 119 , attack.height);
-      
+        ctx.drawImage(bombImage, 5 , 162, 119, bombSizes.HEIGHT, attack.x + bombSizes.OFF - 75, attack.y, 119 , attack.height);
     }
     else{
      
-          ctx.drawImage(bombImage, (bombSizes.WIDTH * attack.frame) + 94 , 159, bombSizes.WIDTH, bombSizes.HEIGHT, attack.x, attack.y, attack.width, attack.height);
+          ctx.drawImage(bombImage, (bombSizes.WIDTH * attack.frame) + 94 , 162, bombSizes.WIDTH, bombSizes.HEIGHT, attack.x, attack.y, attack.width, attack.height);
     }
 
 
 
-    if (attack.frames > 127) {
+    if (attack.frames == 110) {
       attacks.splice(_i);
       _i--;
     }

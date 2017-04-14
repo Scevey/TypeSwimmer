@@ -2,8 +2,6 @@
 const xxh = require('xxhashjs');
 // Character custom class
 const Character = require('./classes/Character.js');
-// our physics calculation file
-const physics = require('./physics.js');
 
 const rooms = [];
 // object of user characters
@@ -24,8 +22,9 @@ const directions = {
 };
 
 const handleAttack = (data) => {
-  io.sockets.in(data.room).emit('attackHit', data.userHash);
+  io.sockets.in(data.room).emit('attackHit', data.hash);
 };
+
 // function to setup our socket server
 const setupSockets = (ioServer) => {
   // set our io server instance
@@ -35,17 +34,6 @@ const setupSockets = (ioServer) => {
   io.on('connection', (sock) => {
     const socket = sock;
 
-  /*  socket.on('', (data) => {
-
-    // create a new character and store it by its unique id
-    characters[hash] = new Character(hash);
-
-    // add the id to the user's socket object for quick reference
-    socket.hash = hash;
-
-    // emit a joined event to the user and send them their character
-    socket.emit('joined', characters[hash]);
-  }*/
     socket.on('join', (data) => {
       const room = data.room;
 
@@ -60,7 +48,7 @@ const setupSockets = (ioServer) => {
       }
       const player = xxh.h32(`${socket.id}${new Date().getTime()}`, 0xCAFEBABE).toString(16);
       io.sockets.in(room).emit('joined');
-      rooms[room][1] = player;
+      rooms[room][length.length] = player;
       socket.join(room);
       const playernum = length.length;
       const outdata = {
@@ -70,6 +58,10 @@ const setupSockets = (ioServer) => {
         num: playernum,
       };
       socket.emit('lobby', outdata);
+    });
+    socket.on('playerWin', () => {
+      socket.emit('winner');
+      socket.broadcast.emit('loser');
     });
     socket.on('create', () => {
       const room = xxh.h32(`${socket.id}${new Date().getTime()}`, 0xCAFEBABE).toString(16);
@@ -95,6 +87,9 @@ const setupSockets = (ioServer) => {
     socket.on('setup', (data) => {
       io.sockets.in(data.room).emit('showStart');
     });
+    socket.on('handleAttack', (data) => {
+      handleAttack(data);
+    });
     // when this user sends the server a movement update
     socket.on('movementUpdate', (data) => {
       // update the user's info
@@ -103,7 +98,6 @@ const setupSockets = (ioServer) => {
       // update the timestamp of the last change for this character
       characters[data.hash].lastUpdate = new Date().getTime();
       // update our physics simulation with the character's updates
-      physics.setCharacter(characters[data.hash], data.room);
 
       // notify everyone of the user's updated movement
       io.sockets.in(data.room).emit('updatedMovement', characters[data.hash]);
@@ -113,11 +107,10 @@ const setupSockets = (ioServer) => {
     // when the user disconnects
     socket.on('disconnect', (data) => {
       // let everyone know this user left
-      io.sockets.in(data.room).emit('left', characters[data.hash]);
+      io.sockets.in(data.room).emit('left', data.hash);
       // remove this user from our object
-      if(characters[data.hash]){
-              delete characters[data.hash]; 
-              physics.setCharacterList(data.hash, data.room);
+      if (characters[data.hash]) {
+        delete characters[data.hash];
       }
 
       // update the character list in our physics calculations
@@ -125,7 +118,7 @@ const setupSockets = (ioServer) => {
       // remove this user from the socket room
       socket.leave(data.room);
     });
-    
+
     // when this user sends an attack request
     socket.on('attack', (data) => {
       const attack = data.attack;
@@ -143,8 +136,11 @@ const setupSockets = (ioServer) => {
         case directions.DOWN: {
           attack.width = 34;
           attack.height = 32;
-          attack.y = attack.y + 91 ;
-          attack.x = attack.x + 5;
+          attack.y += 91;
+          attack.x += 5;
+          if (attack.y >= 470) {
+            handleAttackEvent = false;
+          }
           break;
         }
         // if left, set the height/width of attack to face left
@@ -152,8 +148,11 @@ const setupSockets = (ioServer) => {
         case directions.LEFT: {
           attack.width = 34;
           attack.height = 32;
-          attack.y = attack.y + 55;
-          attack.x = attack.x - 36;
+          attack.y += 55;
+          attack.x -= 36;
+          if (attack.x <= 39) {
+            handleAttackEvent = false;
+          }
           break;
         }
         // if right, set the height/width of attack to face right
@@ -161,8 +160,11 @@ const setupSockets = (ioServer) => {
         case directions.RIGHT: {
           attack.width = 34;
           attack.height = 32;
-          attack.x = attack.x + 46;
-          attack.y = attack.y + 55;
+          attack.x += 46;
+          attack.y += 55;
+          if (attack.x >= 530) {
+            handleAttackEvent = false;
+          }
           break;
         }
         // if up, set the height/width of attack to face up
@@ -170,8 +172,11 @@ const setupSockets = (ioServer) => {
         case directions.UP: {
           attack.width = 34;
           attack.height = 32;
-          attack.y = attack.y - 36;
-          attack.x = attack.x + 5;
+          attack.y -= 36;
+          attack.x += 5;
+          if (attack.y <= 35) {
+            handleAttackEvent = false;
+          }
           break;
         }
         // any other direction we will not handle
@@ -187,12 +192,9 @@ const setupSockets = (ioServer) => {
         // This just updates graphics so people see the attack
         io.sockets.in(data.room).emit('attackUpdate', attack);
         // add the attack to our physics calculations
-        physics.addAttack(attack);
       }
     });
-
   });
 };
 
 module.exports.setupSockets = setupSockets;
-module.exports.handleAttack = handleAttack;

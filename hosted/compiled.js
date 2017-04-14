@@ -40,7 +40,6 @@ var redraw = function redraw(time) {
   ctx.drawImage(mapImage, 0, 0, 600, 600);
   //each user id
   var keys = Object.keys(players);
-
   //for each user
   for (var i = 0; i < keys.length; i++) {
     var player = players[keys[i]];
@@ -79,35 +78,58 @@ var redraw = function redraw(time) {
     //draw our characters
     ctx.drawImage(walkImage, spriteSizes.WIDTH * player.frame, spriteSizes.HEIGHT * player.direction, spriteSizes.WIDTH, spriteSizes.HEIGHT, player.x, player.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);
 
-    //highlight collision box for each character
-    ctx.strokeRect(player.x, player.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);
+    var mod1 = void 0;
+    if (player.hp == 4) {
+      mod1 = 1;
+    }
+    if (player.hp == 3) {
+      mod1 = .75;
+    }
+    if (player.hp == 2) {
+      mod1 = .5;
+    }
+    if (player.hp == 1) {
+      mod1 = .25;
+    }
     ctx.filter = "none";
+    //highlight collision box for each character
+    // ctx.strokeRect(player.x, player.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);
+
+    ctx.strokeRect(player.x + 5, player.y + 5, spriteSizes.WIDTH - 5, 10);
+    ctx.fillStyle = "#ff0000";
+    ctx.fillRect(player.x + 5, player.y + 6, 41, 8);
+    ctx.fillStyle = "#00ff00";
+    ctx.fillRect(player.x + 5, player.y + 6, mod1 * 41, 8);
   }
   for (var _i = 0; _i < attacks.length; _i++) {
     var attack = attacks[_i];
-    //increase our framecount
-
     //every 8 frames increase which sprite image we draw to animate
     //or reset to the beginning of the animation
     if (attack.frames % 16 === 0) {
-      if (attack.frame <= 7) {
+      if (attack.frame <= 6) {
         attack.frame++;
       } else {
         attack.frame = 1;
       }
     }
     attack.frames++;
+    // if(attack.frame == 7){
+    //      ctx.drawImage(bombImage, 444 , 159, bombSizes.WIDTH, bombSizes.HEIGHT, attack.x, attack.y, attack.width, attack.height);
+    // }
     if (attack.frame == 7) {
-      ctx.drawImage(bombImage, 444, 159, bombSizes.WIDTH, bombSizes.HEIGHT, attack.x, attack.y, attack.width, attack.height);
-    } else if (attack.frame == 8) {
+      if (host == true && attack.frames == 110) {
+        addAttack(attack);
+      }
       ctx.drawImage(bombImage, 452, 5, 19, 88, attack.x + 4, attack.y - 30, 19, 88);
-      ctx.drawImage(bombImage, 5, 159, 119, bombSizes.HEIGHT, attack.x + bombSizes.OFF - 75, attack.y, 119, attack.height);
+      ctx.drawImage(bombImage, 5, 162, 119, bombSizes.HEIGHT, attack.x + bombSizes.OFF - 75, attack.y, 119, attack.height);
+      console.log(attack.x + 4);
+      console.log(attack.y - 30);
     } else {
 
-      ctx.drawImage(bombImage, bombSizes.WIDTH * attack.frame + 94, 159, bombSizes.WIDTH, bombSizes.HEIGHT, attack.x, attack.y, attack.width, attack.height);
+      ctx.drawImage(bombImage, bombSizes.WIDTH * attack.frame + 94, 162, bombSizes.WIDTH, bombSizes.HEIGHT, attack.x, attack.y, attack.width, attack.height);
     }
 
-    if (attack.frames > 127) {
+    if (attack.frames == 110) {
       attacks.splice(_i);
       _i--;
     }
@@ -118,72 +140,120 @@ var redraw = function redraw(time) {
 'use strict';
 
 var readyUp = function readyUp(data) {
-	document.getElementById('roomCode').textContent = data.room;
-	roomCode = data.room;
-	playernumber = data.length - 1;
-	numPlayers = data.length;
-	hash = data.player;
-	for (var i = 0; i < numPlayers; i++) {
-		var temp = i.toString();
-		var playerID = 'player' + temp + 'Status';
-		document.getElementById(playerID).textContent = "In Lobby";
-	}
-	document.getElementById('lobby').style.display = 'block';
-	document.getElementById('index').style.display = 'none';
-	if (numPlayers == 2) {
-		//call function to send calls to determine player roles
-		socket.emit('setup', { room: roomCode });
-	}
+  document.getElementById('roomCode').textContent = data.room;
+  roomCode = data.room;
+  playernumber = data.length - 1;
+  numPlayers = data.length;
+  hash = data.player;
+  for (var i = 0; i < numPlayers; i++) {
+    var temp = i.toString();
+    var playerID = 'player' + temp + 'Status';
+    document.getElementById(playerID).textContent = "In Lobby";
+  }
+  document.getElementById('lobby').style.display = 'block';
+  document.getElementById('index').style.display = 'none';
+  if (numPlayers == 4) {
+    //call function to send calls to determine player roles
+    socket.emit('setup', { room: roomCode });
+  }
 };
 var playerJoin = function playerJoin(data) {
-	var temp = numPlayers.toString();
-	var playerID = 'player' + temp + 'Status';
-	document.getElementById(playerID).textContent = "In Lobby";
-	numPlayers++;
+  var temp = numPlayers.toString();
+  var playerID = 'player' + temp + 'Status';
+  document.getElementById(playerID).textContent = "In Lobby";
+  numPlayers++;
 };
 var join = function join() {
-	var roomname = document.getElementById('lobbyName').value;
-	if (roomname === "") {
-		return;
-	}
-	var data = {
-		room: roomname
-	};
-	socket.emit('join', data);
+  var roomname = document.getElementById('lobbyName').value;
+  if (roomname === "") {
+    return;
+  }
+  var data = {
+    room: roomname
+  };
+  socket.emit('join', data);
 };
 var create = function create() {
-	socket.emit('create');
+  socket.emit('create');
+  host = true;
 };
 var showStart = function showStart() {
-	document.getElementById('startButton').style.display = 'block';
-	document.getElementById('status').textContent = "Room Full!";
+  document.getElementById('startButton').style.display = 'block';
+  document.getElementById('status').textContent = "Room Full!";
 };
 var gameStart = function gameStart(e) {
-	var data = {
-		room: roomCode
-	};
+  var data = {
+    room: roomCode
+  };
 
-	socket.emit('gameStart', data);
+  socket.emit('gameStart', data);
 };
 var getGameReady = function getGameReady(data) {
-	players[data.hash] = data;
-	num++;
-	console.log(num);
-	if (num == 2) {
-		document.getElementById('drawer').style.display = 'block';
-		document.getElementById('lobby').style.display = 'none';
-		requestAnimationFrame(redraw);
-	} //set the character by their hash
-	//document.getElementById('drawer').style.display = 'block';
-	//	document.getElementById('lobby').style.display = 'none';
-	//  requestAnimationFrame(redraw);
+  var tempP = data;
+  num++;
+  if (num == 1) {
+    tempP.destX = 47;
+    tempP.prevX = 47;
+    tempP.x = 47;
+    tempP.destY = 52;
+    tempP.prevY = 52;
+    tempP.y = 52;
+    players[data.hash] = tempP;
+  }
+  if (num == 2) {
+    tempP.x = 522;
+    tempP.prevX = 522;
+    tempP.destX = 522;
+    tempP.prevY = 52;
+    tempP.destY = 52;
+    tempP.y = 52;
+    players[data.hash] = tempP;
+    if (numPlayers == num) {
+      document.getElementById('drawer').style.display = 'block';
+      document.getElementById('lobby').style.display = 'none';
+      requestAnimationFrame(redraw);
+    }
+  }
+  if (num == 3) {
+    tempP.destX = 47;
+    tempP.prevX = 47;
+    tempP.x = 47;
+    tempP.destY = 469;
+    tempP.prevY = 469;
+    tempP.y = 469;
+    players[data.hash] = tempP;
+    if (numPlayers == num) {
+      document.getElementById('drawer').style.display = 'block';
+      document.getElementById('lobby').style.display = 'none';
+      requestAnimationFrame(redraw);
+    }
+  }
+  if (num == 4) {
+    tempP.x = 522;
+    tempP.prevX = 522;
+    tempP.destX = 522;
+    tempP.destY = 469;
+    tempP.prevY = 469;
+    tempP.y = 469;
+    players[data.hash] = tempP;
+    if (numPlayers == num) {
+      document.getElementById('drawer').style.display = 'block';
+      document.getElementById('lobby').style.display = 'none';
+      requestAnimationFrame(redraw);
+    }
+  }
+  //set the character by their hash
+  //document.getElementById('drawer').style.display = 'block';
+  //	document.getElementById('lobby').style.display = 'none';
+  //  requestAnimationFrame(redraw);
 };
 var getPlayer = function getPlayer() {
-	var out = {
-		room: roomCode,
-		hash: hash
-	};
-	socket.emit('getPlayer', out);
+  var out = {
+    room: roomCode,
+    hash: hash
+  };
+
+  socket.emit('getPlayer', out);
 };
 'use strict';
 
@@ -199,13 +269,15 @@ var hash = void 0; //user's unique character id (from the server)
 var animationFrame = void 0; //our next animation frame function
 var imgArr = void 0;
 var playernumber = void 0;
+var host = false;
 var numPlayers = void 0;
 var chosen = void 0;
 var roomCode = void 0;
 var attacks = [];
+var liveAttacks = [];
 var players = {}; //character list
 var num = 0;
-
+var bomb = true;
 //handle for key down events
 var keyDownHandler = function keyDownHandler(e) {
   var keyPressed = e.which;
@@ -242,21 +314,21 @@ var keyUpHandler = function keyUpHandler(e) {
     sendAttack();
   }
   //W or UP
-  else if (keyPressed === 87 || keyPressed === 38) {
-      player.moveUp = false;
+  if (keyPressed === 87 || keyPressed === 38) {
+    player.moveUp = false;
+  }
+  // A OR LEFT
+  else if (keyPressed === 65 || keyPressed === 37) {
+      player.moveLeft = false;
     }
-    // A OR LEFT
-    else if (keyPressed === 65 || keyPressed === 37) {
-        player.moveLeft = false;
+    // S OR DOWN
+    else if (keyPressed === 83 || keyPressed === 40) {
+        player.moveDown = false;
       }
-      // S OR DOWN
-      else if (keyPressed === 83 || keyPressed === 40) {
-          player.moveDown = false;
+      // D OR RIGHT
+      else if (keyPressed === 68 || keyPressed === 39) {
+          player.moveRight = false;
         }
-        // D OR RIGHT
-        else if (keyPressed === 68 || keyPressed === 39) {
-            player.moveRight = false;
-          }
 };
 
 var init = function init() {
@@ -276,26 +348,141 @@ var init = function init() {
   socket.on('addPlayer', getGameReady); //when user joins
   socket.on('updatedMovement', update); //when players move
   socket.on('left', removeUser); //when a user leaves
-  //socket.on('getRole', getRole);
-  //socket.on('role', getGameReady);
-  //socket.on('showwords', showWords);
-  //socket.on('word', countDown);
+  socket.on('winner', win);
   socket.on('lobby', readyUp);
   socket.on('joined', playerJoin);
-  //socket.on('gameStart', gameStart);
-  //socket.on('drawend', snapshot);
-  socket.on('attackHit', playerDeath); //when a player dies
+  socket.on('attackHit', playerHit); //when a player dies
   socket.on('attackUpdate', receiveAttack); //when an attack is sent
   socket.on('showStart', showStart);
-  //socket.on('movementUpdate', movementUpdate);
-  //chooser responses
-  //socket.on('addChoice',addChoice);
-  //socket.on('reset',doReset);
   document.body.addEventListener('keydown', keyDownHandler);
   document.body.addEventListener('keyup', keyUpHandler);
 };
 
 window.onload = init;
+'use strict';
+
+// box collision check between two rectangles
+// of a set width/height
+var direction = '';
+var checkCollisions = function checkCollisions(rect1, rect2, width1, height1, width2, height2) {
+  if (rect1.x < rect2.x + width2 && rect1.x + width1 > rect2.x && rect1.y < rect2.y + height2 && height1 + rect1.y > rect2.y) {
+    return true; // is colliding
+  }
+  return false; // is not colliding
+};
+
+// check attack collisions to see if colliding with the
+// user themselves and return false so users cannot damage
+// themselves
+var checkAttackCollision = function checkAttackCollision(character, attackObj) {
+  var attack = attackObj;
+  var attackX = attack.x;
+  var attackY = attack.y;
+
+  // if attacking themselves, we won't check collision
+  if (character.hash === attack.hash) {
+    bomb = true;
+    return false;
+  }
+  if (attack.up == true) {
+
+    //   attack.x = attack.x + 4;
+    //    attack.y = attack.y - 44;
+    var up = checkCollisions(character, attack, spriteSizes.WIDTH, spriteSizes.HEIGHT, attack.explosion1W, attack.explosion1Y);
+    if (up == true) {
+      // console.log('up');    
+      return true;
+    }
+  }
+  if (attack.right == true) {
+
+    attack.x = attackX;
+    attack.y = attackY;
+    attack.x = attack.x + 59;
+    var right = checkCollisions(character, attack, spriteSizes.WIDTH, spriteSizes.HEIGHT, attack.explosion2W, attack.height);
+    if (right == true) {
+      //    console.log('right');
+      return true;
+    }
+  }
+  if (attack.down == true) {
+    attack.x = attackX;
+    attack.y = attackY;
+    attack.x = attack.x + 4;
+    attack.y = attack.y + 44;
+    var down = checkCollisions(character, attack, spriteSizes.WIDTH, spriteSizes.HEIGHT, attack.explosion1W, attack.explosion1Y);
+    if (down == true) {
+      //console.log('down');
+      return true;
+    }
+  }
+  if (attack.left == true) {
+    attack.x = attackX;
+    attack.y = attackY;
+    attack.x = attack.x - 59;
+    var left = checkCollisions(character, attack, spriteSizes.WIDTH, spriteSizes.HEIGHT, attack.explosion2W, attack.height);
+    if (left == true) {
+      //console.log('left');
+      return true;
+    }
+  } else {
+    return false;
+  }
+};
+
+// handle each attack and calculate collisions
+var checkAttacks = function checkAttacks() {
+  // if we have attack
+  if (liveAttacks.length > 0) {
+    // get all characters
+    var keys = Object.keys(players);
+    var characters = players;
+
+    // for each attack
+    for (var i = 0; i < liveAttacks.length; i++) {
+      // for each character
+      for (var k = 0; k < keys.length; k++) {
+        var char1 = characters[keys[k]];
+
+        // call to see if the attack and character hit
+        var hit = checkAttackCollision(char1, liveAttacks[i]);
+
+        if (hit) {
+          // if a hit
+          // ask sockets to notify users which character was hit
+          var data = {
+            hash: char1.hash,
+            room: roomCode
+          };
+          socket.emit('handleAttack', data);
+          console.log('hit');
+          // kill that character and remove from our user list
+          //delete charList[char1.hash];
+        } else {
+          // if not a hit
+          console.log('miss');
+        }
+      }
+
+      // once the attack has been calculated again all users
+      // remove this attack and move onto the next one
+      liveAttacks.splice(i);
+      // decrease i since our splice changes the array length
+      i--;
+    }
+  }
+};
+
+// add a new attack to calculate physics on
+var addAttack = function addAttack(data) {
+  liveAttacks.push(data);
+};
+
+setInterval(function () {
+  if (host == true) {
+    checkAttacks();
+  }
+}, 20);
 'use strict';
 
 //when we receive a character update
@@ -337,8 +524,9 @@ var update = function update(data) {
 //function to remove a character from our character list
 var removeUser = function removeUser(data) {
   //if we have that character, remove them
-  if (players[data.hash]) {
-    delete players[data.hash];
+  if (players[data]) {
+    delete players[data];
+    requestAnimationFrame(redraw);
   }
 };
 var receiveAttack = function receiveAttack(data) {
@@ -346,41 +534,84 @@ var receiveAttack = function receiveAttack(data) {
 };
 
 var sendAttack = function sendAttack() {
-  var attacker = players[hash];
+  if (bomb == true) {
+    var attacker = players[hash];
 
-  var attack = {
-    hash: hash,
-    room: roomCode,
-    x: attacker.x,
-    y: attacker.y,
-    direction: attacker.direction,
-    frames: 0,
-    frame: 0
-  };
-  var data = {
-    attack: attack,
-    room: roomCode
-  };
-  socket.emit('attack', data);
+    var attack = {
+      hash: hash,
+      room: roomCode,
+      x: attacker.x,
+      y: attacker.y,
+      explosion1W: 19,
+      explosion1Y: 44,
+      explosion2W: 59,
+      explosion2Y: 32,
+      direction: attacker.direction,
+      up: true,
+      down: true,
+      left: true,
+      right: true,
+      frames: 0,
+      frame: 0
+    };
+    var data = {
+      attack: attack,
+      room: roomCode
+    };
+    socket.emit('attack', data);
+    bomb = false;
+  }
 };
 
 //when a character is killed
 var playerDeath = function playerDeath(data) {
   //remove the character
   delete players[data];
+  num--;
 
   //if the character killed is our character
   //then disconnect and draw a game over screen
   if (data === hash) {
     socket.disconnect();
     cancelAnimationFrame(animationFrame);
+    ctx.fillStyle = "black";
     ctx.fillRect(0, 0, 600, 600);
     ctx.fillStyle = 'white';
     ctx.font = '48px serif';
-    ctx.fillText('You died', 50, 100);
+    ctx.fillText('You died', 250, 300);
+  }
+  if (num == 1) {
+    var winner = Object.keys(players);
+    var outdata = {
+      room: roomCode,
+      player: winner[0]
+    };
+    socket.emit('playerWin', outdata);
+    console.log('win');
   }
 };
+var playerHit = function playerHit(data) {
+  //remove the character
+  players[data].hp--;
 
+  console.log(players[data].hp);
+  if (players[data].hp == 0) {
+    playerDeath(data);
+  }
+  //if the character killed is our character
+  //then disconnect and draw a game over screen
+};
+var win = function win() {
+  //winner    
+  console.log('wineee');
+  cancelAnimationFrame(animationFrame);
+  ctx.clearRect(0, 0, 600, 600);
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, 600, 600);
+  ctx.fillStyle = 'white';
+  ctx.font = '48px serif';
+  ctx.fillText('You Won!', 250, 300);
+};
 //update this user's positions based on keyboard input
 var updatePosition = function updatePosition() {
   var player = players[hash];
@@ -391,29 +622,29 @@ var updatePosition = function updatePosition() {
   //   player.moveDown = true;
   // player.moveUp = false;
   // }
-  //else{
-  //  player.moveDown = null;
-  //}
-  //if user is jumping up, decrease y
   if (player.jump) {
     player.destY -= 40;
     player.fall = true;
   }
 
-  if (player.moveUp && player.destY > 0) {
+  if (player.moveUp && player.destY > 39) {
     player.destY -= 2;
+    player.left = true;
   }
   //if user is moving down, increase y
-  if (player.moveDown && player.destY < 480) {
+  if (player.moveDown && player.destY < 470) {
     player.destY += 2;
+    player.down = true;
   }
   //if user is moving left, decrease x
-  if (player.moveLeft && player.destX > 0) {
+  if (player.moveLeft && player.destX > 35) {
     player.destX -= 2;
+    player.left = true;
   }
   //if user is moving right, increase x
-  if (player.moveRight && player.destX < 540) {
+  if (player.moveRight && player.destX < 530) {
     player.destX += 2;
+    player.right = true;
   }
 
   //determine direction based on the inputs of direction keys 

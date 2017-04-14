@@ -24,6 +24,11 @@ class Character {
     this.moveDown = false; // if character is moving down
     this.moveUp = false; // if character is moving up
     this.jump = false;
+    this.hp = 4;
+    this.up = false;
+    this.down = false;
+    this.left = false;
+    this.right = false;
   }
 }
 

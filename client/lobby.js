@@ -11,7 +11,7 @@
 			}
 			document.getElementById('lobby').style.display = 'block';
 			document.getElementById('index').style.display = 'none';
-			if(numPlayers == 2){
+			if(numPlayers == 4){
 				//call function to send calls to determine player roles
 				socket.emit('setup',{room: roomCode});
 			}
@@ -35,6 +35,7 @@
 		}
 		const create = ()=>{
 			socket.emit('create');
+      host = true;
 		}
 		const showStart = ()=>{
 			document.getElementById('startButton').style.display = 'block';
@@ -49,14 +50,61 @@
 			socket.emit('gameStart', data);
 		}
     const getGameReady = (data)=>{
-        players[data.hash] = data;
-        num++; 
-        console.log(num);
+        let tempP = data;
+        num++;        
+        if(num == 1){
+        tempP.destX = 47;
+        tempP.prevX = 47;
+        tempP.x = 47;
+        tempP.destY = 52;
+        tempP.prevY = 52;
+        tempP.y = 52;
+        players[data.hash] = tempP;
+        }
         if(num == 2){
+          tempP.x = 522;
+          tempP.prevX = 522;
+          tempP.destX = 522;
+          tempP.prevY = 52;
+          tempP.destY = 52;
+          tempP.y = 52;
+          players[data.hash] = tempP;
+          if(numPlayers == num){
           document.getElementById('drawer').style.display = 'block';
           document.getElementById('lobby').style.display = 'none';
           requestAnimationFrame(redraw);
-        }//set the character by their hash
+          }
+
+        }
+        if(num == 3){
+        tempP.destX = 47;
+        tempP.prevX = 47;
+        tempP.x = 47;
+        tempP.destY = 469;
+        tempP.prevY = 469;
+        tempP.y = 469;
+        players[data.hash] = tempP;
+          if(numPlayers == num){
+          document.getElementById('drawer').style.display = 'block';
+          document.getElementById('lobby').style.display = 'none';
+          requestAnimationFrame(redraw);
+          }
+        }
+         if(num == 4){
+        tempP.x = 522;
+        tempP.prevX = 522;
+        tempP.destX = 522;
+        tempP.destY = 469;
+        tempP.prevY = 469;
+        tempP.y = 469;
+        players[data.hash] = tempP;
+          if(numPlayers == num){
+          document.getElementById('drawer').style.display = 'block';
+          document.getElementById('lobby').style.display = 'none';
+          requestAnimationFrame(redraw);
+          }
+        }
+        //set the character by their hash
 				//document.getElementById('drawer').style.display = 'block';
 			//	document.getElementById('lobby').style.display = 'none';
       //  requestAnimationFrame(redraw);
@@ -66,5 +114,6 @@
           room: roomCode,
           hash: hash
         };
+        
         socket.emit('getPlayer',out)
 		}

@@ -34,18 +34,12 @@ const update = (data) => {
   player.alpha = 0.05;
 };
 
-//function to remove a character from our character list
-const removeUser = (data) => {
-  //if we have that character, remove them
-  if(players[data.hash]) {
-    delete players[data.hash];
-  }
-};
 const receiveAttack = (data) => {
   attacks.push(data);
 };
 
 const sendAttack = () => {
+  if(bomb == true){
   const attacker = players[hash];
 
   const attack = {
@@ -53,7 +47,15 @@ const sendAttack = () => {
     room: roomCode,
     x: attacker.x,
     y: attacker.y,
+    explosion1W: 19,
+    explosion1Y: 44,
+    explosion2W: 59,
+    explosion2Y: 32,
     direction: attacker.direction,
+    up: true,
+    down: true,
+    left: true,
+    right: true,
     frames: 0,
     frame: 0
   };
@@ -62,25 +64,73 @@ const sendAttack = () => {
     room: roomCode
   };
   socket.emit('attack', data);
+  bomb = false;
+  }
 };
 
 //when a character is killed
 const playerDeath = (data) => {
   //remove the character
   delete players[data];
+  num --;
   
   //if the character killed is our character
   //then disconnect and draw a game over screen
   if(data === hash) {
-    socket.disconnect();
     cancelAnimationFrame(animationFrame);
+    ctx.fillStyle = "black";
     ctx.fillRect(0, 0, 600, 600);
     ctx.fillStyle = 'white';
     ctx.font = '48px serif';
-    ctx.fillText('You died', 50, 100);
+    ctx.fillText('You died', 250, 300);
+  }
+  if( num == 1){
+    const winner = Object.keys(players);
+   const outdata = {
+        room: roomCode,
+        player: winner[0]
+      };
+    socket.emit('playerWin', outdata);
   }
 };
+const playerHit = (data) => {
+  //remove the character
+    players[data].hp --;
+    if(players[data].hp == 0){
+      playerDeath(data);
+    }
+  //if the character killed is our character
+  //then disconnect and draw a game over screen
+  
+};
+const win = () => {
+  //winner    
+    socket.emit('disconnect');
+    socket.disconnect();
+    cancelAnimationFrame(animationFrame);
+    ctx.clearRect(0, 0, 600, 600);
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, 600, 600);
+    ctx.fillStyle = 'white';
+    ctx.font = '48px serif';
+    ctx.fillText('You Won!', 250, 300);
 
+  
+};
+const lose = () => {
+  //loser    
+  socket.emit('disconnect');
+    socket.disconnect();
+      cancelAnimationFrame(animationFrame);
+      ctx.clearRect(0, 0, 600, 600);
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, 600, 600);
+    ctx.fillStyle = 'white';
+    ctx.font = '48px serif';
+    ctx.fillText('You Won!', 250, 300);
+
+  
+};
 //update this user's positions based on keyboard input
 const updatePosition = () => {
   const player = players[hash];
@@ -91,29 +141,29 @@ const updatePosition = () => {
   //   player.moveDown = true;
     // player.moveUp = false;
  // }
-  //else{
-  //  player.moveDown = null;
-  //}
-  //if user is jumping up, decrease y
   if(player.jump) {
        player.destY -= 40;
        player.fall = true;
     }
   
-  if(player.moveUp && player.destY > 0) {
+  if(player.moveUp && player.destY > 39) {
     player.destY -= 2;
+    player.left= true;
   }
   //if user is moving down, increase y
-  if(player.moveDown && player.destY < 480) {
+  if(player.moveDown && player.destY < 470) {
     player.destY += 2;
+    player.down = true;
   }
   //if user is moving left, decrease x
-  if(player.moveLeft && player.destX > 0) {
+  if(player.moveLeft && player.destX > 35) {
     player.destX -= 2;
+    player.left = true;
   }
   //if user is moving right, increase x
-  if(player.moveRight && player.destX < 540 ) {
+  if(player.moveRight && player.destX < 530 ) {
     player.destX += 2;
+    player.right = true;
   }
 
   //determine direction based on the inputs of direction keys 
