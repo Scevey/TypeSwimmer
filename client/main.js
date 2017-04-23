@@ -3,7 +3,6 @@ let ctx;
 let walkImage; //spritesheet for character
 let slashImage; //image for attack
 let mapImage;
-let bombImage;
 //our websocket connection 
 let socket; 
 let hash; //user's unique character id (from the server)
@@ -14,11 +13,8 @@ let host = false;
 let numPlayers;
 let chosen;
 let roomCode;
-let attacks = []; 
-let liveAttacks = []; 
 let players = {}; //character list
 let num = 0;
-let bomb = true;
 //handle for key down events
 const keyDownHandler = (e) => {
   var keyPressed = e.which;
@@ -74,9 +70,8 @@ const keyUpHandler = (e) => {
 
 const init = () => {
   walkImage = document.querySelector('#walk');
-  bombImage = document.querySelector('#bomb');
   mapImage = document.querySelector('#map');
-  slashImage = document.querySelector('#slash');
+
   document.querySelector('#joinLobby').onclick = join;
 	document.querySelector('#createLobby').onclick = create;
 	document.querySelector('#startButton').onclick = gameStart; 
@@ -93,8 +88,6 @@ const init = () => {
   socket.on('loser', lose);//lose msg
 	socket.on('lobby', readyUp);//lobby setup
 	socket.on('joined', playerJoin);//join lobby
-  socket.on('attackHit', playerHit); //when a player dies
-  socket.on('attackUpdate', receiveAttack); //when an attack is sent
 	socket.on('showStart',showStart); //show start
   document.body.addEventListener('keydown', keyDownHandler);
   document.body.addEventListener('keyup', keyUpHandler);

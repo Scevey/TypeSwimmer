@@ -108,6 +108,17 @@
           if(numPlayers == num){
           document.getElementById('drawer').style.display = 'block';
           document.getElementById('lobby').style.display = 'none';
+          ctx.fillStyle = 'lightsalmon'; 
+          ctx.strokeStyle = 'white';
+          ctx.drawImage(mapImage,0,0,800,800);
+       ctx.ellipse(400, 400, 245, 180, 0, 0, Math.PI*2);  
+       ctx.ellipse(400, 400, 295, 220, 0, 0, Math.PI*2); 
+       ctx.ellipse(400, 400, 335, 260, 0, 0, Math.PI*2);
+       ctx.ellipse(400, 400, 375, 300, 0, 0, Math.PI*2);
+       ctx.lineWidth = 5;
+
+        ctx.stroke();
+        //ctx.fill();
           requestAnimationFrame(redraw);
           }
         }

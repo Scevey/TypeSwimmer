@@ -34,42 +34,6 @@ const update = (data) => {
   player.alpha = 0.05;
 };
 
-//add attack
-const receiveAttack = (data) => {
-  attacks.push(data);
-};
-
-//send attack 
-const sendAttack = () => {
-
-  const attacker = players[hash];
-  //if(attacker.bomb == true){
-  const attack = {
-    hash: hash,
-    room: roomCode,
-    x: attacker.x,
-    y: attacker.y,
-    explosion1W: 19,
-    explosion1Y: 44,
-    explosion2W: 59,
-    explosion2Y: 32,
-    direction: attacker.direction,
-    up: true,
-    down: true,
-    left: true,
-    right: true,
-    frames: 0,
-    frame: 0
-  };
-  var data = {
-    attack: attack,
-    room: roomCode
-  };
-  socket.emit('attack', data);
-  //players[hash].bomb = false;
- // }
-};
-
 //when a character is killed
 const playerDeath = (data) => {
   //remove the character
@@ -87,24 +51,8 @@ const playerDeath = (data) => {
     ctx.font = '48px serif';
     ctx.fillText('You died', 250, 300);
   }
-  if( num == 1){
-    const winner = Object.keys(players);
-   const outdata = {
-        room: roomCode,
-        player: winner[0]
-      };
-    socket.emit('playerWin', outdata);
-  }
 };
-//handle hit by attack
-const playerHit = (data) => {
-  //remove the character
-    players[data].hp --;
-    if(players[data].hp == 0){
-      playerDeath(data);
-    }
-  
-};
+
 const win = () => {
   //winner    
     socket.emit('disconnect');
@@ -140,21 +88,13 @@ const updatePosition = () => {
   //move the last x/y to our previous x/y variables
   player.prevX = player.x;
   player.prevY = player.y;
-  //if(player.destY <= 480){
-  //   player.moveDown = true;
-    // player.moveUp = false;
- // }
-  if(player.jump) {
-       player.destY -= 40;
-       player.fall = true;
-    }
   
   if(player.moveUp && player.destY > 39) {
     player.destY -= 2;
     player.left= true;
   }
   //if user is moving down, increase y
-  if(player.moveDown && player.destY < 470) {
+  if(player.moveDown && player.destY < 670) {
     player.destY += 2;
     player.down = true;
   }
@@ -164,7 +104,7 @@ const updatePosition = () => {
     player.left = true;
   }
   //if user is moving right, increase x
-  if(player.moveRight && player.destX < 530 ) {
+  if(player.moveRight && player.destX < 730 ) {
     player.destX += 2;
     player.right = true;
   }

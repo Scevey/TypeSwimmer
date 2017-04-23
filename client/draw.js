@@ -17,12 +17,6 @@ const spriteSizes = {
   WIDTH: 46,
   HEIGHT: 91
 };
-//size of bomb sprites
-const bombSizes = {
-  WIDTH: 32,
-  HEIGHT: 32,
-  OFF: 16
-}
 //function to lerp (linear interpolation)
 //Takes position one, position two and the 
 //percentage of the movement between them (0-1)
@@ -32,11 +26,23 @@ const lerp = (v0, v1, alpha) => {
 
 //redraw with requestAnimationFrame
 const redraw = (time) => {
-  //update this user's positions
+  //update this user's positionsz
   updatePosition();
 
-  ctx.clearRect(0, 0, 600, 600);
-  ctx.drawImage(mapImage,0,0,600,600);
+  ctx.clearRect(0, 0, 800, 800);  
+  ctx.fillStyle = 'lightsalmon'; 
+  ctx.strokeStyle = 'white';
+  ctx.drawImage(mapImage,0,0,800,800);
+ // ctx.ellipse(400, 400, 245, 180, 0, 0, Math.PI*2);  
+ // ctx.ellipse(400, 400, 295, 220, 0, 0, Math.PI*2); 
+ // ctx.ellipse(400, 400, 335, 260, 0, 0, Math.PI*2);
+ // ctx.ellipse(400, 400, 375, 300, 0, 0, Math.PI*2);
+ // ctx.lineWidth = 5;
+
+  //ctx.stroke();
+  //ctx.fill();
+
+
   //each user id
   const keys = Object.keys(players);
   //for each user
@@ -87,62 +93,7 @@ const redraw = (time) => {
       spriteSizes.WIDTH, 
       spriteSizes.HEIGHT
     );
-    
-    let mod1;
-    if(player.hp == 4){
-      mod1 = 1;
-    }
-    if(player.hp == 3){
-      mod1 = .75;
-    }    
-    if(player.hp == 2){
-      mod1 = .5;
-    }  
-    if(player.hp == 1){
-      mod1 = .25;
-    }
-     ctx.filter = "none";
-    //highlight collision box for each character
-   // ctx.strokeRect(player.x, player.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);
-
-     ctx.strokeRect(player.x + 5, player.y + 5, spriteSizes.WIDTH - 5, 10);
-     ctx.fillStyle = "#ff0000";
-     ctx.fillRect(player.x + 5, player.y + 6, 41, 8);
-     ctx.fillStyle = "#00ff00";
-     ctx.fillRect(player.x+ 5, player.y + 6,  mod1 * 41, 8);  
-
-  }
-  for (var _i = 0; _i < attacks.length; _i++) {
-    var attack = attacks[_i];
-      //every 16 frames increase which sprite image we draw to animate
-      //or reset to the beginning of the animation
-      if(attack.frames % 16 === 0) {
-        if(attack.frame <= 6) {
-          attack.frame++;
-        }
-        else {
-          attack.frame = 1;
-        }
-      }
-    attack.frames++;
-    if(attack.frame == 7){ 
-    if(host == true && attack.frames == 110){
-         addAttack(attack);
-    }
-        ctx.drawImage(bombImage, 452 , 5, 19, 88, attack.x + 4, attack.y - 30, 19 , 88 );
-        ctx.drawImage(bombImage, 5 , 162, 119, bombSizes.HEIGHT, attack.x + bombSizes.OFF - 75, attack.y, 119 , attack.height);
-    }
-    else{
-     
-          ctx.drawImage(bombImage, (bombSizes.WIDTH * attack.frame) + 94 , 162, bombSizes.WIDTH, bombSizes.HEIGHT, attack.x, attack.y, attack.width, attack.height);
-    }
-
-
-
-    if (attack.frames == 110) {
-      attacks.splice(_i);
-      _i--;
-    }
+    ctx.filter = "none";
   }
   //set our next animation frame
   animationFrame = requestAnimationFrame(redraw);
