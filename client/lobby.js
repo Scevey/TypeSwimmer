@@ -45,6 +45,8 @@
 		const showStart = ()=>{
 			document.getElementById('startButton').style.display = 'block';
 			document.getElementById('status').textContent = "Room Full!";
+      var wordspot = Math.floor(Math.random() * 588);
+      socket.emit('words', wordspot);
 		}
     //get game started
 		const gameStart = (e)=>{
@@ -134,4 +136,9 @@
         };
         
         socket.emit('getPlayer',out)
+		}
+    const showWord = (data)=>{
+			word = data;
+      //get html element by id set text content = word;
+      //or write to canvas on overlay
 		}

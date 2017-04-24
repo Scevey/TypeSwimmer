@@ -137,6 +137,8 @@ var create = function create() {
 var showStart = function showStart() {
   document.getElementById('startButton').style.display = 'block';
   document.getElementById('status').textContent = "Room Full!";
+  var wordspot = Math.floor(Math.random() * 588);
+  socket.emit('words', wordspot);
 };
 //get game started
 var gameStart = function gameStart(e) {
@@ -225,6 +227,11 @@ var getPlayer = function getPlayer() {
 
   socket.emit('getPlayer', out);
 };
+var showWord = function showWord(data) {
+  word = data;
+  //get html element by id set text content = word;
+  //or write to canvas on overlay
+};
 'use strict';
 
 var canvas = void 0;
@@ -241,6 +248,7 @@ var playernumber = void 0;
 var host = false;
 var numPlayers = void 0;
 var chosen = void 0;
+var word = void 0;
 var roomCode = void 0;
 var players = {}; //character list
 var num = 0;
@@ -275,10 +283,6 @@ var keyUpHandler = function keyUpHandler(e) {
   var player = players[hash];
 
   // Space
-  if (keyPressed === 32) {
-    //player.jump = true;
-    sendAttack();
-  }
   //W or UP
   if (keyPressed === 87 || keyPressed === 38) {
     player.moveUp = false;
@@ -317,6 +321,7 @@ var init = function init() {
   socket.on('loser', lose); //lose msg
   socket.on('lobby', readyUp); //lobby setup
   socket.on('joined', playerJoin); //join lobby
+  socket.on('showword', showword); //join lobby
   socket.on('showStart', showStart); //show start
   document.body.addEventListener('keydown', keyDownHandler);
   document.body.addEventListener('keyup', keyUpHandler);

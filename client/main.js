@@ -12,6 +12,7 @@ let playernumber;
 let host = false;
 let numPlayers;
 let chosen;
+let word;
 let roomCode;
 let players = {}; //character list
 let num = 0;
@@ -46,10 +47,6 @@ const keyUpHandler = (e) => {
   const player = players[hash];
 
   // Space
-  if(keyPressed === 32) {
-    //player.jump = true;
-    sendAttack();
-  }
   //W or UP
   if(keyPressed === 87 || keyPressed === 38) {
     player.moveUp = false;
@@ -88,6 +85,7 @@ const init = () => {
   socket.on('loser', lose);//lose msg
 	socket.on('lobby', readyUp);//lobby setup
 	socket.on('joined', playerJoin);//join lobby
+	socket.on('showword', showword);//join lobby
 	socket.on('showStart',showStart); //show start
   document.body.addEventListener('keydown', keyDownHandler);
   document.body.addEventListener('keyup', keyUpHandler);
