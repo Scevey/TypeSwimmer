@@ -12,29 +12,26 @@ let playernumber;
 let host = false;
 let numPlayers;
 let chosen;
+let wordIndex = 0; //index to follow position in the word
 let word;
 let roomCode;
 let players = {}; //character list
 let num = 0;
+
 //handle for key down events
 const keyDownHandler = (e) => {
   var keyPressed = e.which;
   const player = players[hash];
-    // W OR UP
-  if(keyPressed === 87 || keyPressed === 38) {
-    player.moveUp = true;
-  }
-  // A OR LEFT
-  else if(keyPressed === 65 || keyPressed === 37) {
-    player.moveLeft = true;
-  }
-  //S or DOWN
-  else if(keyPressed === 83 || keyPressed === 40) {
-    player.moveDown = true;
-  }
-  // D OR RIGHT
-  else if(keyPressed === 68 || keyPressed === 39) {
-    player.moveRight = true;
+  
+  //handle checking vs a word
+  if (keyPressed == word.charCodeAt(wordIndex)) {
+    //increase index
+    wordIndex++;
+    
+    //check if word is finished
+    if (wordIndex == word.length) {
+      getWord();
+    }
   }
 };
 const start = (data) => {
@@ -85,7 +82,7 @@ const init = () => {
   socket.on('loser', lose);//lose msg
 	socket.on('lobby', readyUp);//lobby setup
 	socket.on('joined', playerJoin);//join lobby
-	socket.on('showword', showword);//join lobby
+	socket.on('showword', showWord);//join lobby
 	socket.on('showStart',showStart); //show start
   document.body.addEventListener('keydown', keyDownHandler);
   document.body.addEventListener('keyup', keyUpHandler);

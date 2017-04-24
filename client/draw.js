@@ -95,6 +95,9 @@ const redraw = (time) => {
     );
     ctx.filter = "none";
   }
+  
+  ctx.fillText(word, canvas.width / 2, canvas.height / 2, 500);
+  
   //set our next animation frame
   animationFrame = requestAnimationFrame(redraw);
 };

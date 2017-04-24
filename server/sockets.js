@@ -11,7 +11,7 @@ const words = ['A rolling pin', 'A hammock', 'An anchor', 'A skunk', 'A desk cha
 // our socketio instance
 let io;
 
-const directions = {
+/* const directions = {
   DOWNLEFT: 0,
   DOWN: 1,
   DOWNRIGHT: 2,
@@ -20,7 +20,7 @@ const directions = {
   RIGHT: 5,
   UPRIGHT: 6,
   UP: 7,
-};
+};*/
 
 const handleAttack = (data) => {
   io.sockets.in(data.room).emit('attackHit', data.hash);
@@ -122,7 +122,6 @@ const setupSockets = (ioServer) => {
       // remove this user from the socket room
       socket.leave(data.room);
     });
-
   });
 };
 
