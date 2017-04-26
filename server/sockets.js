@@ -43,7 +43,7 @@ const setupSockets = (ioServer) => {
         return;
       }
       const length = io.sockets.adapter.rooms[room];
-      if (length.length >= 4) {
+      if (length.length >= 3) {
        // socket.emit('error', 'Sorry room is full');
         return;
       }

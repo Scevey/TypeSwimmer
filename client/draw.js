@@ -29,18 +29,11 @@ const redraw = (time) => {
   //update this user's positionsz
   updatePosition();
 
-  ctx.clearRect(0, 0, 800, 800);  
+  ctx.clearRect(0, 0, 937, 661);  
   ctx.fillStyle = 'lightsalmon'; 
   ctx.strokeStyle = 'white';
-  ctx.drawImage(mapImage,0,0,800,800);
- // ctx.ellipse(400, 400, 245, 180, 0, 0, Math.PI*2);  
- // ctx.ellipse(400, 400, 295, 220, 0, 0, Math.PI*2); 
- // ctx.ellipse(400, 400, 335, 260, 0, 0, Math.PI*2);
- // ctx.ellipse(400, 400, 375, 300, 0, 0, Math.PI*2);
- // ctx.lineWidth = 5;
+  ctx.drawImage(mapImage,0,0,937,661);
 
-  //ctx.stroke();
-  //ctx.fill();
 
 
   //each user id

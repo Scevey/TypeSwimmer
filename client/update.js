@@ -46,7 +46,7 @@ const playerDeath = (data) => {
      socket.disconnect();
     cancelAnimationFrame(animationFrame);
     ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, 600, 600);
+    ctx.fillRect(0, 0, 937, 661);
     ctx.fillStyle = 'white';
     ctx.font = '48px serif';
     ctx.fillText('You died', 250, 300);
@@ -58,9 +58,9 @@ const win = () => {
     socket.emit('disconnect');
 
     cancelAnimationFrame(animationFrame);
-    ctx.clearRect(0, 0, 600, 600);
+    ctx.clearRect(0, 0, 937, 661);
     ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, 600, 600);
+    ctx.fillRect(0, 0, 937, 661);
     ctx.fillStyle = 'white';
     ctx.font = '48px serif';
     ctx.fillText('You Won!', 250, 300);
@@ -73,9 +73,9 @@ const lose = () => {
     delete players[hash];
     socket.disconnect();
       cancelAnimationFrame(animationFrame);
-      ctx.clearRect(0, 0, 600, 600);
+      ctx.clearRect(0, 0, 937, 661);
     ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, 600, 600);
+    ctx.fillRect(0, 0, 937, 661);
     ctx.fillStyle = 'white';
     ctx.font = '48px serif';
     ctx.fillText('You Lost!', 250, 300);
@@ -94,7 +94,7 @@ const updatePosition = () => {
     player.left= true;
   }
   //if user is moving down, increase y
-  if(player.moveDown && player.destY < 670) {
+  if(player.moveDown && player.destY < 531) {
     player.destY += 2;
     player.down = true;
   }
@@ -104,7 +104,7 @@ const updatePosition = () => {
     player.left = true;
   }
   //if user is moving right, increase x
-  if(player.moveRight && player.destX < 730 ) {
+  if(player.moveRight && player.destX < 867 ) {
     player.destX += 2;
     player.right = true;
   }

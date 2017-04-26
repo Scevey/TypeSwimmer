@@ -12,7 +12,7 @@
 			}
 			document.getElementById('lobby').style.display = 'block';
 			document.getElementById('index').style.display = 'none';
-			if(numPlayers == 4){
+			if(numPlayers == 3){
 				//call function to send calls to determine player roles
 				socket.emit('setup',{room: roomCode});
 			}
@@ -94,32 +94,8 @@
         players[data.hash] = tempP;
           if(numPlayers == num){
           document.getElementById('drawer').style.display = 'block';
-          document.getElementById('lobby').style.display = 'none';
-          requestAnimationFrame(redraw);
-          }
-        }
-         if(num == 4){
-        tempP.x = 522;
-        tempP.prevX = 522;
-        tempP.destX = 522;
-        tempP.destY = 469;
-        tempP.prevY = 469;
-        tempP.y = 469;
-        players[data.hash] = tempP;
-          if(numPlayers == num){
-          document.getElementById('drawer').style.display = 'block';
-          document.getElementById('lobby').style.display = 'none';
-          ctx.fillStyle = 'lightsalmon'; 
-          ctx.strokeStyle = 'white';
-          ctx.drawImage(mapImage,0,0,800,800);
-       ctx.ellipse(400, 400, 245, 180, 0, 0, Math.PI*2);  
-       ctx.ellipse(400, 400, 295, 220, 0, 0, Math.PI*2); 
-       ctx.ellipse(400, 400, 335, 260, 0, 0, Math.PI*2);
-       ctx.ellipse(400, 400, 375, 300, 0, 0, Math.PI*2);
-       ctx.lineWidth = 5;
-
-        ctx.stroke();
-        //ctx.fill();
+          document.getElementById('lobby').style.display = 'none';      
+          ctx.drawImage(mapImage,0,0,937,661);
           requestAnimationFrame(redraw);
           }
         }
