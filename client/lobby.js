@@ -80,21 +80,21 @@
         let tempP = data;
         num++;        
         if(num == 1){
-        tempP.destX = 47;
-        tempP.prevX = 47;
-        tempP.x = 47;
-        tempP.destY = 52;
-        tempP.prevY = 52;
-        tempP.y = 52;
+        tempP.destX = 460;
+        tempP.prevX = 460;
+        tempP.x = 460;
+        tempP.destY = 490;
+        tempP.prevY = 490;
+        tempP.y = 490;
         players[data.hash] = tempP;
         }
         if(num == 2){
-          tempP.x = 522;
-          tempP.prevX = 522;
-          tempP.destX = 522;
-          tempP.prevY = 52;
-          tempP.destY = 52;
-          tempP.y = 52;
+          tempP.destX = 460;
+        tempP.prevX = 460;
+        tempP.x = 460;
+        tempP.destY = 490;
+        tempP.prevY = 490;
+        tempP.y = 490;
           players[data.hash] = tempP;
           if(numPlayers == num){
           document.getElementById('drawer').style.display = 'block';
@@ -104,12 +104,12 @@
 
         }
         if(num == 3){
-        tempP.destX = 47;
-        tempP.prevX = 47;
-        tempP.x = 47;
-        tempP.destY = 469;
-        tempP.prevY = 469;
-        tempP.y = 469;
+        tempP.destX = 460;
+        tempP.prevX = 460;
+        tempP.x = 460;
+        tempP.destY = 490;
+        tempP.prevY = 490;
+        tempP.y = 490;
         players[data.hash] = tempP;
           if(numPlayers == num){
           document.getElementById('drawer').style.display = 'block';
@@ -118,12 +118,12 @@
           }
         }
          if(num == 4){
-        tempP.x = 522;
-        tempP.prevX = 522;
-        tempP.destX = 522;
-        tempP.destY = 469;
-        tempP.prevY = 469;
-        tempP.y = 469;
+        tempP.destX = 460;
+        tempP.prevX = 460;
+        tempP.x = 460;
+        tempP.destY = 490;
+        tempP.prevY = 490;
+        tempP.y = 490;
         players[data.hash] = tempP;
           if(numPlayers == num){
           document.getElementById('drawer').style.display = 'block';
@@ -152,6 +152,7 @@
     }
     const showWord = (data)=>{
 			word = data;
+      wordDraw = (canvas.width / 2) - (word.length * 10);
       //get html element by id set text content = word;
       //or write to canvas on overlay
 		}

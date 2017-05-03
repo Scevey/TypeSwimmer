@@ -94,9 +94,18 @@ const redraw = (time) => {
     ctx.strokeText(player.name, player.x + 5, player.y, 40);
 
   }
-  ctx.font = "36px Arial";
-  ctx.fillText(word, canvas.width / 2 - 75, canvas.height / 2, 500);
-  ctx.strokeText(word, canvas.width / 2 - 75, canvas.height / 2, 500);
+  ctx.save();
+  ctx.fillStyle = "black";
+  ctx.font = "20pt Arial";
+  ctx.textAlign = "center";
+  for (var i = 0; i < word.length; i++) {
+    ctx.fillText(word[i], wordDraw + (20 * i), canvas.height / 2);
+  }
+  ctx.beginPath();
+  ctx.moveTo(wordDraw + (20 * wordIndex) - 10, canvas.height / 2 + 5);
+  ctx.lineTo(wordDraw + (20 * (wordIndex + 1)) - 10, canvas.height / 2 + 5);
+  ctx.stroke();
+  ctx.restore();
   
   
   //set our next animation frame

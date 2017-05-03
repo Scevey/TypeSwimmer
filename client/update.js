@@ -88,26 +88,6 @@ const updatePosition = () => {
   //move the last x/y to our previous x/y variables
   player.prevX = player.x;
   player.prevY = player.y;
-  
-  if(player.moveUp && player.destY > 39) {
-    player.destY -= 2;
-    player.left= true;
-  }
-  //if user is moving down, increase y
-  if(player.moveDown && player.destY < 531) {
-    player.destY += 2;
-    player.down = true;
-  }
-  //if user is moving left, decrease x
-  if(player.moveLeft && player.destX > 35) {
-    player.destX -= 2;
-    player.left = true;
-  }
-  //if user is moving right, increase x
-  if(player.moveRight && player.destX < 867 ) {
-    player.destX += 2;
-    player.right = true;
-  }
 
   //determine direction based on the inputs of direction keys 
   if(player.moveUp && player.moveLeft) player.direction = directions.UPLEFT;
