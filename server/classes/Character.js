@@ -3,6 +3,7 @@ class Character {
   constructor(data) {
     this.hash = data.hash; // character's unique id
     this.room = data.room;
+    this.name = data.name;
     // last time this character was updated
     this.lastUpdate = new Date().getTime();
     const Xpos = Math.floor(Math.random() * 400);

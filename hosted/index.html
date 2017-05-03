@@ -61,7 +61,7 @@ label{
 	margin-right:0.75em;
 }
 .title{
-	text-align:center
+	text-align:center;
 }
 .parent {
 	line-height: 2;
@@ -105,11 +105,20 @@ label{
 }
 #joinLobby{
 	margin-left: 190px;
-	 background: rgb(255,89,105);
+	background: rgb(255,89,105);
 }
 #form{
     float: right;
     margin-right: 100px;
+	
+}
+#user{
+	display: inline;
+}
+#form1{
+	margin-left: 35%;
+	margin-bottom: 2%;
+	margin-top: 2%;
 }
 #subject,#feed, #chat{
 	border: 3px solid;
@@ -136,7 +145,7 @@ label{
 	padding:3px;
 	margin: 9px;
 }
-#index{
+#content{
 	border: 3px solid black;
 }
 #wordbox{
@@ -148,6 +157,37 @@ label{
 	padding: 20px;
 	border: 3px solid;
 	border-color: brown;
+}
+#ad2{
+    margin-left: 50px;
+    float: right;
+    margin-right: 100px;
+	}
+#ad1{
+    float: left;
+    margin-right: 75px;
+    margin-left: 100px;
+}
+#ad3{
+    float: right;
+    margin-top: -420px;
+    margin-right: 100px;
+}
+#error{
+	display: block;
+	z-index: 50;
+	position: absolute;
+	bottom: 40%;
+	left: 37%;
+	background: lightgrey;
+	padding: 20px;
+	border: 3px solid;
+	border-color: black;
+}
+#errormessage{
+	color: red;
+	text-align: center;
+	font-weight: 900;
 }
 .playerBox{
 	padding:3px;
@@ -169,9 +209,11 @@ label{
 	<div>
 	<div style="padding-top: 100px">
 		<div> 
-			<canvas id="canvas" style="margin-left: 25%" height="661" width="937">Please use an HTML 5 browser</canvas>
-			<img id="walk" class="hidden" src="/assets/walk.png" alt="walk spritesheet" />
-			<img id="map" class="hidden" src="/assets/background.png" alt="slash spritesheet" />
+			<div id='ad1'><img src="/assets/ad.png" alt ="ad space"></div>
+			<canvas id="canvas" style="" height="661" width="937">Please use an HTML 5 browser</canvas>
+			<img id="walk" class="hidden" src="/assets/walk.png" alt="walk spritesheet">
+			<img id="map" class="hidden" src="/assets/background.png" alt="slash spritesheet">
+			<div id='ad2'><img src="/assets/ad.png" alt ="ad space"></div>
 		</div>
 	</div>
 		</div>
@@ -182,34 +224,46 @@ label{
 	<div style="padding:20px; padding-top: 10px;">
 		<div class="playerBox" style="background: lightgreen">
 			<div id="player0box">
-				<h2 class="title"> Player 1 <h2>
+				<h2 class="title"> <span id="player0Name">Waiting...</span><h2>
 				<p class="title">Status: <span id="player0Status">Waiting...</span></p>
 			</div>
 		</div>
 		<div class="playerBox"style="background: lightyellow">
 			<div id="player1box">
-				<h2 class="title"> Player 2 <h2>
+				<h2 class="title"><span id="player1Name">Waiting...</span><h2>
 				<p class="title">Status: <span id="player1Status">Waiting...</span></p>
 			</div>
 		</div>
 		<div class="playerBox"style="background: lightsalmon">
 			<div id="player2box">
-				<h2 class="title"> Player 3 <h2>
+				<h2 class="title"> <span id="player2Name">Waiting...</span> <h2>
 				<p class="title">Status: <span id="player2Status">Waiting...</span></p>
+			</div>
+		</div>
+		<div class="playerBox"style="background: lightsteelblue">
+			<div id="player3box">
+				<h2 class="title"> <span id="player3Name">Waiting...</span><h2>
+				<p class="title">Status: <span id="player3Status">Waiting...</span></p>
 			</div>
 		</div>
 		<button style="display:none;" id="startButton" onclick="gameStart()">Start Game</button>
 	</div>
 </div>
-<div id="index" class="wrap">
+<div id="index">
+<div id='ad1'><img src="/assets/ad.png" alt ="ad space"></div>
+<div id='content' class="wrap">
 	<h1 class="title">Type Racer</h1>
 	<h2 class="title">"A race where your feet are as fast as your fingers"</h2>
-	<button class="lobbyButton"id= 'createLobby'>Create New Lobby</button>
-	<button class="lobbyButton"id= 'joinLobby' >Join in with a Friend</button>
+	<form id="form1">
+	<h3 id="user">User Name:</h3>
+	<input id="userName" type="text" name="userName">
+	</form>	
+	<button class="lobbyButton"id= 'createLobby'>Create New Lobby</button>	
 	<form id="form">
 	Lobby Name:<br>
 	<input id="lobbyName" type="text" name="lobbyName">
 	</form>
+	<button class="lobbyButton"id= 'joinLobby' >Join in with a Friend</button>
 	<div height="600" width="400" style="background-color: white">
 	</div>
 	<div class="parent" style="float:right; margin-top: 20px; ">
@@ -223,9 +277,15 @@ label{
 		</ul>
 	</div>
 </div>
+<div id='ad3'><img src="/assets/ad.png" alt ="ad space"></div>
+
+</div>
 <div id="win" style="display:none"class="wrap">
 	<h1 class="title">Game Over!</h1>
 	<h2 class="title" id="winmessage"></h2>
+</div>
+<div id='error' style="display:none">
+	<h2 class="title" id="errormessage"></h2>
 </div>
 </body>
 </html>

@@ -11,9 +11,11 @@ let imgArr;
 let playernumber;
 let host = false;
 let numPlayers;
+let name;
 let chosen;
 let wordIndex = 0; //index to follow position in the word
 let word;
+let names = [];
 let roomCode;
 let players = {}; //character list
 let num = 0;
@@ -78,6 +80,7 @@ const init = () => {
   socket.on('addPlayer', getGameReady); //when user joins
   socket.on('updatedMovement', update); //when players move
   socket.on('left', lose); //when a user leaves
+  socket.on('error', handleError); //when a user leaves
   socket.on('winner', win);//win msg
   socket.on('loser', lose);//lose msg
 	socket.on('lobby', readyUp);//lobby setup

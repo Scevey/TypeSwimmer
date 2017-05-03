@@ -76,9 +76,15 @@ var redraw = function redraw(time) {
     //draw our characters
     ctx.drawImage(walkImage, spriteSizes.WIDTH * player.frame, spriteSizes.HEIGHT * player.direction, spriteSizes.WIDTH, spriteSizes.HEIGHT, player.x, player.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);
     ctx.filter = "none";
+    ctx.fillStyle = 'white';
+    ctx.strokeStyle = 'black';
+    ctx.font = '24px Arial';
+    ctx.fillText(player.name, player.x + 5, player.y, 40);
+    ctx.strokeText(player.name, player.x + 5, player.y, 40);
   }
-
-  ctx.fillText(word, canvas.width / 2, canvas.height / 2, 500);
+  ctx.font = "36px Arial";
+  ctx.fillText(word, canvas.width / 2 - 75, canvas.height / 2, 500);
+  ctx.strokeText(word, canvas.width / 2 - 75, canvas.height / 2, 500);
 
   //set our next animation frame
   animationFrame = requestAnimationFrame(redraw);
@@ -87,6 +93,7 @@ var redraw = function redraw(time) {
 
 //show lobby stuff
 var readyUp = function readyUp(data) {
+  clearError();
   document.getElementById('roomCode').textContent = data.room;
   roomCode = data.room;
   playernumber = data.length - 1;
@@ -95,11 +102,13 @@ var readyUp = function readyUp(data) {
   for (var i = 0; i < numPlayers; i++) {
     var temp = i.toString();
     var playerID = 'player' + temp + 'Status';
+    var playerName = 'player' + temp + 'Name';
     document.getElementById(playerID).textContent = "In Lobby";
+    document.getElementById(playerName).textContent = data.roomnames[i];
   }
   document.getElementById('lobby').style.display = 'block';
   document.getElementById('index').style.display = 'none';
-  if (numPlayers == 3) {
+  if (numPlayers == 4) {
     //call function to send calls to determine player roles
     socket.emit('setup', { room: roomCode });
   }
@@ -108,23 +117,39 @@ var readyUp = function readyUp(data) {
 var playerJoin = function playerJoin(data) {
   var temp = numPlayers.toString();
   var playerID = 'player' + temp + 'Status';
+  var playerName = 'player' + temp + 'Name';
   document.getElementById(playerID).textContent = "In Lobby";
+  document.getElementById(playerName).textContent = data;
   numPlayers++;
 };
 //join a lobby
 var join = function join() {
   var roomname = document.getElementById('lobbyName').value;
-  if (roomname === "") {
+  name = document.getElementById('userName').value;
+  if (name.length > 10) {
+    //error name too long
+    return;
+  }
+  if (roomname === "" || name === "") {
+    var error = 'Make sure to enter a Room Code and User Name';
+    handleError(error);
     return;
   }
   var data = {
-    room: roomname
+    room: roomname,
+    user: name
   };
   socket.emit('join', data);
 };
 //create a lobby, become host
 var create = function create() {
-  socket.emit('create');
+  name = document.getElementById('userName').value;
+  if (name === "") {
+    var error = 'Please enter a name';
+    handleError(error);
+    return;
+  }
+  socket.emit('create', name);
   host = true;
 };
 //show start button
@@ -179,6 +204,20 @@ var getGameReady = function getGameReady(data) {
     if (numPlayers == num) {
       document.getElementById('drawer').style.display = 'block';
       document.getElementById('lobby').style.display = 'none';
+      requestAnimationFrame(redraw);
+    }
+  }
+  if (num == 4) {
+    tempP.x = 522;
+    tempP.prevX = 522;
+    tempP.destX = 522;
+    tempP.destY = 469;
+    tempP.prevY = 469;
+    tempP.y = 469;
+    players[data.hash] = tempP;
+    if (numPlayers == num) {
+      document.getElementById('drawer').style.display = 'block';
+      document.getElementById('lobby').style.display = 'none';
       ctx.drawImage(mapImage, 0, 0, 937, 661);
       requestAnimationFrame(redraw);
     }
@@ -191,7 +230,8 @@ var getGameReady = function getGameReady(data) {
 var getPlayer = function getPlayer() {
   var out = {
     room: roomCode,
-    hash: hash
+    hash: hash,
+    name: name
   };
 
   socket.emit('getPlayer', out);
@@ -204,6 +244,21 @@ var showWord = function showWord(data) {
   word = data;
   //get html element by id set text content = word;
   //or write to canvas on overlay
+};
+var handleError = function handleError(data) {
+  //set text for error msg
+  var errormsg = data;
+  document.getElementById('errormessage').innerHTML = errormsg;
+
+  //show msg
+  document.getElementById('error').style.display = 'block';
+  //time out, hide msg
+  setTimeout(function () {
+    clearError();
+  }, 5000); //5secs
+};
+var clearError = function clearError() {
+  document.getElementById('error').style.display = 'none';
 };
 'use strict';
 
@@ -220,9 +275,11 @@ var imgArr = void 0;
 var playernumber = void 0;
 var host = false;
 var numPlayers = void 0;
+var name = void 0;
 var chosen = void 0;
 var wordIndex = 0; //index to follow position in the word
 var word = void 0;
+var names = [];
 var roomCode = void 0;
 var players = {}; //character list
 var num = 0;
@@ -287,6 +344,7 @@ var init = function init() {
   socket.on('addPlayer', getGameReady); //when user joins
   socket.on('updatedMovement', update); //when players move
   socket.on('left', lose); //when a user leaves
+  socket.on('error', handleError); //when a user leaves
   socket.on('winner', win); //win msg
   socket.on('loser', lose); //lose msg
   socket.on('lobby', readyUp); //lobby setup

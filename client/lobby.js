@@ -1,5 +1,6 @@
 	//show lobby stuff
 	const readyUp = (data) =>{
+      clearError();
 			document.getElementById('roomCode').textContent=data.room;
 			roomCode = data.room;
 			playernumber = data.length-1;
@@ -7,12 +8,14 @@
 			hash = data.player;
 			for(var i = 0; i < numPlayers; i++){
 				var temp = i.toString();
-				var playerID = 'player'+temp+'Status';
-				document.getElementById(playerID).textContent = "In Lobby";
+			var playerID = 'player'+temp+'Status';
+			var playerName = 'player'+temp+'Name';
+			document.getElementById(playerID).textContent = "In Lobby";
+			document.getElementById(playerName).textContent = data.roomnames[i];
 			}
 			document.getElementById('lobby').style.display = 'block';
 			document.getElementById('index').style.display = 'none';
-			if(numPlayers == 3){
+			if(numPlayers == 4){
 				//call function to send calls to determine player roles
 				socket.emit('setup',{room: roomCode});
 			}
@@ -21,24 +24,40 @@
 		const playerJoin = (data)=>{
 			var temp = (numPlayers).toString();
 			var playerID = 'player'+temp+'Status';
+			var playerName = 'player'+temp+'Name';
 			document.getElementById(playerID).textContent = "In Lobby";
+			document.getElementById(playerName).textContent = data;
 			numPlayers++;
 
 		}
     //join a lobby
 		const join = ()=>{
 			var roomname = document.getElementById('lobbyName').value;
-			if(roomname === ""){
-			return;
+			name = document.getElementById('userName').value;
+      if (name.length > 10){
+        //error name too long
+        return;
+      }
+			if(roomname === "" || name === ""){
+      var error = 'Make sure to enter a Room Code and User Name';        
+			handleError(error);
+      return;
 			}
 			var data = {
-				room: roomname
+				room: roomname,
+        user: name
 			};
 			socket.emit('join', data);
 		}
     //create a lobby, become host
-		const create = ()=>{
-			socket.emit('create');
+		const create = ()=>{ 
+    name = document.getElementById('userName').value;
+      if(name === ""){
+        var error = 'Please enter a name';
+        handleError(error);
+        return;
+      }
+			socket.emit('create', name);
       host = true;
 		}
     //show start button
@@ -94,7 +113,21 @@
         players[data.hash] = tempP;
           if(numPlayers == num){
           document.getElementById('drawer').style.display = 'block';
-          document.getElementById('lobby').style.display = 'none';      
+          document.getElementById('lobby').style.display = 'none';
+          requestAnimationFrame(redraw);
+          }
+        }
+         if(num == 4){
+        tempP.x = 522;
+        tempP.prevX = 522;
+        tempP.destX = 522;
+        tempP.destY = 469;
+        tempP.prevY = 469;
+        tempP.y = 469;
+        players[data.hash] = tempP;
+          if(numPlayers == num){
+          document.getElementById('drawer').style.display = 'block';
+          document.getElementById('lobby').style.display = 'none';
           ctx.drawImage(mapImage,0,0,937,661);
           requestAnimationFrame(redraw);
           }
@@ -103,11 +136,12 @@
 				//document.getElementById('drawer').style.display = 'block';
 			//	document.getElementById('lobby').style.display = 'none';
       //  requestAnimationFrame(redraw);
-		}
+		}          
     const getPlayer = ()=>{
         var out = {
           room: roomCode,
-          hash: hash
+          hash: hash,
+          name: name
         };
         
         socket.emit('getPlayer',out)
@@ -121,3 +155,19 @@
       //get html element by id set text content = word;
       //or write to canvas on overlay
 		}
+    const handleError = (data)=>{
+      //set text for error msg
+      var errormsg = data;
+      document.getElementById('errormessage').innerHTML = errormsg;
+
+      //show msg
+       document.getElementById('error').style.display = 'block';
+      //time out, hide msg
+      setTimeout(function(){
+          clearError();
+        }, 5000);  //5secs
+      
+    }
+    const clearError = () =>{
+     document.getElementById('error').style.display = 'none';
+    }
