@@ -4,6 +4,7 @@ const xxh = require('xxhashjs');
 const Character = require('./classes/Character.js');
 
 const rooms = [];
+const activegames = [];
 const names = [];
 // object of user characters
 const characters = {};
@@ -40,12 +41,16 @@ const setupSockets = (ioServer) => {
       const room = data.room;
 
       if (!rooms[room]) {
-        socket.emit('error', 'Sorry that room doesnt exist');
+        socket.emit('msg', 'Sorry that room doesnt exist');
+        return;
+      }
+      if (activegames[room] == true) {
+        socket.emit('msg', 'Sorry the game has started');
         return;
       }
       const length = io.sockets.adapter.rooms[room];
       if (length.length >= 4) {
-        socket.emit('error', 'Sorry room is full');
+        socket.emit('msg', 'Sorry room is full');
         return;
       }
       const player = xxh.h32(`${socket.id}${new Date().getTime()}`, 0xCAFEBABE).toString(16);
@@ -86,6 +91,7 @@ const setupSockets = (ioServer) => {
       socket.emit('lobby', outdata);
     });
     socket.on('gameStart', (data) => {
+      activegames[data.room] = true;
       io.sockets.in(data.room).emit('gameStart');
     });
     socket.on('getPlayer', (data) => {

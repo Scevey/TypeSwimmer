@@ -3,6 +3,7 @@ let ctx;
 let walkImage; //spritesheet for character
 let slashImage; //image for attack
 let mapImage;
+let fishImage;
 //our websocket connection 
 let socket; 
 let hash; //user's unique character id (from the server)
@@ -10,9 +11,12 @@ let animationFrame; //our next animation frame function
 let imgArr;
 let playernumber;
 let host = false;
+let selected = 'blue';
 let numPlayers;
 let name;
 let chosen;
+let x;
+let y;
 let wordIndex = 0; //index to follow position in the word
 var word = "";
 var wordDraw = 0;
@@ -381,6 +385,7 @@ const start = (data) => {
 
 const init = () => {
   walkImage = document.querySelector('#walk');
+  fishImage = document.querySelector('#fish');
   mapImage = document.querySelector('#map');
 
   document.querySelector('#joinLobby').onclick = join;
@@ -395,7 +400,7 @@ const init = () => {
   socket.on('addPlayer', getGameReady); //when user joins
   socket.on('updatedMovement', update); //when players move
   socket.on('left', lose); //when a user leaves
-  socket.on('error', handleError); //when a user leaves
+  socket.on('msg', handleError); //when a user leaves
   socket.on('winner', win);//win msg
   socket.on('loser', lose);//lose msg
 	socket.on('lobby', readyUp);//lobby setup

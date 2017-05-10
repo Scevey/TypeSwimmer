@@ -2,20 +2,16 @@
 //their character. These are mapped
 //to integers for fast/small storage
 const directions = {
-  DOWNLEFT: 0,
-  DOWN: 1,
-  DOWNRIGHT: 2, 
-  LEFT: 3,
-  UPLEFT: 4,
-  RIGHT: 5, 
-  UPRIGHT: 6,
-  UP: 7
+  DOWN: 0,
+  LEFT: 1,
+  RIGHT: 2, 
+  UP: 3
 };
 
 //size of our character sprites
 const spriteSizes = {
-  WIDTH: 46,
-  HEIGHT: 91
+  WIDTH: 32,
+  HEIGHT: 34
 };
 //function to lerp (linear interpolation)
 //Takes position one, position two and the 
@@ -65,20 +61,21 @@ const redraw = (time) => {
 
       //every 8 frames increase which sprite image we draw to animate
       //or reset to the beginning of the animation
-      if(player.frameCount % 8 === 0) {
-        if(player.frame < 7) {
+      if(player.frameCount % 3 === 0) {
+        if(player.frame < 2) {
           player.frame++;
         } else {
           player.frame = 0;
         }
       }
     }
-
+      let offsetX = spriteSizes.width * player.frame;
+      let offsetY = spriteSizes.height * player.direction;
     //draw our characters
     ctx.drawImage(
-      walkImage, 
-      spriteSizes.WIDTH * player.frame,
-      spriteSizes.HEIGHT * player.direction,
+      fishImage, 
+      spriteSizes.WIDTH * player.iconx + offsetX,
+      spriteSizes.HEIGHT * player.icony + offsetY,
       spriteSizes.WIDTH, 
       spriteSizes.HEIGHT,
       player.x, 

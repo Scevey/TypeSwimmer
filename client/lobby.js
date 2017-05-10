@@ -15,7 +15,7 @@
 			}
 			document.getElementById('lobby').style.display = 'block';
 			document.getElementById('index').style.display = 'none';
-			if(numPlayers == 4){
+			if(numPlayers == 1){
 				//call function to send calls to determine player roles
 				socket.emit('setup',{room: roomCode});
 			}
@@ -34,8 +34,9 @@
 		const join = ()=>{
 			var roomname = document.getElementById('lobbyName').value;
 			name = document.getElementById('userName').value;
-      if (name.length > 10){
-        //error name too long
+      if (name.length > 12){
+        var error = 'Please use a shorter name';        
+        handleError(error);
         return;
       }
 			if(roomname === "" || name === ""){
@@ -70,6 +71,7 @@
 		const gameStart = (e)=>{
     var data = {
       room: roomCode,
+      
     };
 
 
@@ -138,10 +140,14 @@
       //  requestAnimationFrame(redraw);
 		}          
     const getPlayer = ()=>{
+        var iconX = x; //0,1,2,3
+        var iconY = y; //0,1
         var out = {
           room: roomCode,
           hash: hash,
-          name: name
+          name: name,
+          x: iconX,
+          y: iconY
         };
         
         socket.emit('getPlayer',out)
@@ -171,4 +177,48 @@
     }
     const clearError = () =>{
      document.getElementById('error').style.display = 'none';
+    }
+    const choosePlayer = (name) =>{
+      console.log(name);
+      switch(name) {
+    case 'blue':
+        //document.getElementById(name) add class selected
+        x = 0; 
+        y = 0;
+        break;
+    case 'yellow':
+        //document.getElementById(name) add class selected
+        x = 1; 
+        y = 0;
+        break;
+    case 'green':
+        //document.getElementById(name) add class selected
+        x = 2; 
+        y = 0;
+        break;
+    case 'red':
+        //document.getElementById(name) add class selected
+        x = 0; 
+        y = 2;
+        break;
+    case 'brown':
+        //document.getElementById(name) add class selected
+        x = 0; 
+        y = 1;
+        break;
+     case 'snek':
+        //document.getElementById(name) add class selected
+        x = 0; 
+        y = 2;
+        break;
+    case 'frog':
+        //document.getElementById(name) add class selected
+        x = 3; 
+        y = 0;
+        break;
+    default:
+        //document.getElementById(name) add class selected
+        x = 0; 
+        y = 0;
+}
     }

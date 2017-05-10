@@ -34,6 +34,12 @@ body{
 canvas{
 	background-color: rgb(255,255,255);
 }
+.icon{
+	margin-left: 45%;
+	display: block;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
 #mainCanvas {
 	background: #ffffff;
 	position:absolute;
@@ -173,6 +179,10 @@ label{
     margin-top: -420px;
     margin-right: 100px;
 }
+#ad4{
+    margin-top: -660px;
+    margin-left: 900px;
+}
 #error{
 	display: block;
 	z-index: 50;
@@ -204,21 +214,23 @@ label{
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="/assets/compiled.js"> </script>
 </head>
-<body background="/assets/poly.jpg">
+<body background="/assets/background.jpg">
 <div id="drawer" style="display: none">
 	<div>
 	<div style="padding-top: 100px">
 		<div> 
 			<div id='ad1'><img src="/assets/ad.png" alt ="ad space"></div>
-			<canvas id="canvas" style="" height="667" width="931">Please use an HTML 5 browser</canvas>
+			<canvas id="canvas" style="" height="664" width="938">Please use an HTML 5 browser</canvas>
 			<img id="walk" class="hidden" src="/assets/walk.png" alt="walk spritesheet">
-			<img id="map" class="hidden" src="/assets/background.png" alt="slash spritesheet">
+			<img id="map" class="hidden" src="/assets/background.png" alt="map image">
+			<img id="fish" class="hidden" src="/assets/fishies.png" alt="fish spritesheet">
 			<div id='ad2'><img src="/assets/ad.png" alt ="ad space"></div>
 		</div>
 	</div>
 		</div>
 	</div>
 <div id="lobby" style="display: none" class="wrap">
+	<div>
 	<h2 style="margin-top: 0px" class="title">Game Lobby (<span id="status">Waiting...</span>)</h2>
 	<h2 style="margin-top: 0px" class="title">Room Code (<span id="roomCode">Waiting...</span>)</h2>
 	<div style="padding:20px; padding-top: 10px;">
@@ -247,6 +259,17 @@ label{
 			</div>
 		</div>
 		<button style="display:none;" id="startButton" onclick="gameStart()">Start Game</button>
+	</div>
+	</div>
+	<div id='ad4' style="background: blue; width: 200px; height: 661px">
+	<h1 class="title">Choose An Icon</h1>
+	<img class="icon" src="/assets/blue.png" height="34" alt="Blue Icon" onclick="choosePlayer('blue')">
+	<img class="icon" src="/assets/brown.png" height="34" alt="Brown Icon" onclick="choosePlayer('brown')">
+	<img class="icon" src="/assets/yellow.png" height="34" alt="Yellow Icon" onclick="choosePlayer('yellow')">
+	<img class="icon" src="/assets/green.png" height="34" alt="Green Icon" onclick="choosePlayer('green')">
+	<img class="icon" src="/assets/red.png" height="34" alt="Red Icon" onclick="choosePlayer('red')">
+	<img class="icon" src="/assets/snek.png" height="34"  alt="Frog Icon" onclick="choosePlayer('snek')">
+	<img class="icon" src="/assets/frog.png" height="34"  alt="Snek Icon" onclick="choosePlayer('frog')">
 	</div>
 </div>
 <div id="index">
