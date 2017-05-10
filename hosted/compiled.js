@@ -236,8 +236,8 @@ var getGameReady = function getGameReady(data) {
   //  requestAnimationFrame(redraw);
 };
 var getPlayer = function getPlayer() {
-  var iconX = 0; //0,1,2,3
-  var iconY = 0; //0,1
+  var iconX = x; //0,1,2,3
+  var iconY = y; //0,1
   var out = {
     room: roomCode,
     hash: hash,
@@ -336,8 +336,8 @@ var selected = 'blue';
 var numPlayers = void 0;
 var name = void 0;
 var chosen = void 0;
-var x = void 0;
-var y = void 0;
+var x = 0;
+var y = 0;
 var wordIndex = 0; //index to follow position in the word
 var word = "";
 var wordDraw = 0;

@@ -15,8 +15,8 @@ let selected = 'blue';
 let numPlayers;
 let name;
 let chosen;
-let x;
-let y;
+let x = 0;
+let y = 0;
 let wordIndex = 0; //index to follow position in the word
 var word = "";
 var wordDraw = 0;
