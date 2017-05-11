@@ -186,6 +186,10 @@ var getGameReady = function getGameReady(data) {
     tempP.prevY = 490;
     tempP.y = 490;
     players[data.hash] = tempP;
+    document.getElementById('drawer').style.display = 'block';
+    document.getElementById('lobby').style.display = 'none';
+    ctx.drawImage(mapImage, 0, 0, 937, 661);
+    requestAnimationFrame(redraw);
   }
   if (num == 2) {
     tempP.destX = 460;
@@ -198,6 +202,7 @@ var getGameReady = function getGameReady(data) {
     if (numPlayers == num) {
       document.getElementById('drawer').style.display = 'block';
       document.getElementById('lobby').style.display = 'none';
+      ctx.drawImage(mapImage, 0, 0, 937, 661);
       requestAnimationFrame(redraw);
     }
   }
@@ -212,6 +217,7 @@ var getGameReady = function getGameReady(data) {
     if (numPlayers == num) {
       document.getElementById('drawer').style.display = 'block';
       document.getElementById('lobby').style.display = 'none';
+      ctx.drawImage(mapImage, 0, 0, 937, 661);
       requestAnimationFrame(redraw);
     }
   }

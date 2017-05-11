@@ -89,6 +89,10 @@
         tempP.prevY = 490;
         tempP.y = 490;
         players[data.hash] = tempP;
+                  document.getElementById('drawer').style.display = 'block';
+          document.getElementById('lobby').style.display = 'none';
+          ctx.drawImage(mapImage,0,0,937,661);
+          requestAnimationFrame(redraw);
         }
         if(num == 2){
           tempP.destX = 460;
@@ -101,6 +105,7 @@
           if(numPlayers == num){
           document.getElementById('drawer').style.display = 'block';
           document.getElementById('lobby').style.display = 'none';
+          ctx.drawImage(mapImage,0,0,937,661);
           requestAnimationFrame(redraw);
           }
 
@@ -116,7 +121,8 @@
           if(numPlayers == num){
           document.getElementById('drawer').style.display = 'block';
           document.getElementById('lobby').style.display = 'none';
-          requestAnimationFrame(redraw);
+          ctx.drawImage(mapImage,0,0,937,661);
+          requestAnimationFrame(redraw); 
           }
         }
          if(num == 4){
