@@ -25,6 +25,7 @@ var trackPoints = [460, 490, 630, 490, 720, 450, 740, 410, 740, 280, 685, 225, 6
 var roomCode;
 var players = {}; //character list
 var num = 0;
+var goingForward = true;
 //keycode map from http://stackoverflow.com/questions/1772179/get-character-value-from-keycode-in-javascript-then-trim
 var keyboardMap = [
   "", // [0]
@@ -200,7 +201,7 @@ var keyboardMap = [
   "ASTERISK", // [170]
   "PLUS", // [171]
   "PIPE", // [172]
-  "-", // [173]
+  "", // [173]
   "OPEN_CURLY_BRACKET", // [174]
   "CLOSE_CURLY_BRACKET", // [175]
   "TILDE", // [176]
@@ -216,7 +217,7 @@ var keyboardMap = [
   "SEMICOLON", // [186]
   "EQUALS", // [187]
   "COMMA", // [188]
-  "MINUS", // [189]
+  "-", // [189]
   "PERIOD", // [190]
   "SLASH", // [191]
   "BACK_QUOTE", // [192]
@@ -306,80 +307,24 @@ var keyDownHandler = function keyDownHandler(e) {
 const advanceOnTrack = () => {
   var player = players[hash];
   player.prevX = Math.ceil(player.prevX);
-  player.prevY = Math.ceil(player.prevY);
-  /*if (trackMoveIndex == 0 && player.prevX == 620) { //work on this later
-    trackMoveIndex += 2;
-    player.destX = trackPoints[trackMoveIndex];
-    player.destY = trackPoints[trackMoveIndex + 1];
+  
+  if (player.prevX >= 860) {
+    goingForward = false;
   }
   
-  else if (trackMoveIndex == 6 && player.prevY == 290) {
-    trackMoveIndex += 2;
-    player.destX = trackPoints[trackMoveIndex];
-    player.destY = trackPoints[trackMoveIndex + 1];
-  }
-  
-  else if (trackMoveIndex == 12 && player.prevX == 310) {
-    trackMoveIndex += 2;
-    player.destX = trackPoints[trackMoveIndex];
-    player.destY = trackPoints[trackMoveIndex + 1];
-  }
-  
-  else if (trackMoveIndex == 18 && player.prevY == 400) {
-    trackMoveIndex += 2;
-    player.destX = trackPoints[trackMoveIndex];
-    player.destY = trackPoints[trackMoveIndex + 1];
-  }
-  
-  else if (trackMoveIndex == 24 && player.prevX == 450) {
-    trackMoveIndex = 0;
-    player.destX = trackPoints[0];
-    player.destY = trackPoints[1];
-    win();
-  }
-  
-  else if (trackMoveIndex == 0) {
-    player.destX += 10;
-  }
-  
-  else if (trackMoveIndex == 6) {
-    player.destY -= 10;
-  }
-  
-  else if (trackMoveIndex == 12) {
-    player.destX -= 10;
-  }
-  
-  else if (trackMoveIndex == 18) {
-    player.destY += 10;
-  }
-  
-  else if (trackMoveIndex == 24) {
-    player.destX += 10;
-  }
-  
-  else {
-    trackMoveIndex += 2;
-    player.destX = trackPoints[trackMoveIndex];
-    player.destY = trackPoints[trackMoveIndex + 1];
-  }*/
-  
-  //use this for quick testing
-  if (trackMoveIndex == 24) {
-    trackMoveIndex = 0;
-    player.destX = trackPoints[0];
-    player.destY = trackPoints[1];
+  if (!goingForward && player.prevX <= 40) {
     var data = {
       color: selected,
       room: roomCode,
       name: name  
     }
     socket.emit('endGame', data)
-  }
-  else { 
-    trackMoveIndex += 2;
-    player.destX = trackPoints[trackMoveIndex];
-    player.destY = trackPoints[trackMoveIndex + 1];
+  } 
+  
+  if (goingForward) {
+    player.destX += 40;
+  } else {
+    player.destX -= 40;
   }
 }
 

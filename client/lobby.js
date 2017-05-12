@@ -83,41 +83,41 @@
         let tempP = data;
         num++;        
         if(num == 1){
-        tempP.destX = 460;
-        tempP.prevX = 460;
-        tempP.x = 460;
-        tempP.destY = 490;
-        tempP.prevY = 490;
-        tempP.y = 490;
-        players[data.hash] = tempP;
+          tempP.destX = 40;
+          tempP.prevX = 40;
+          tempP.x = 40;
+          tempP.destY = 180 + (80 * (num - 1)) + 15;
+          tempP.prevY = tempP.destY;
+          tempP.y = tempP.destY;
+          players[data.hash] = tempP;
           $("#lobby").hide();
           $("#drawer").show();
           ctx.drawImage(mapImage,0,0,937,661);
           requestAnimationFrame(redraw);
         }
         if(num == 2){
-          tempP.destX = 460;
-        tempP.prevX = 460;
-        tempP.x = 460;
-        tempP.destY = 490;
-        tempP.prevY = 490;
-        tempP.y = 490;
+          tempP.destX = 40;
+          tempP.prevX = 40;
+          tempP.x = 40;
+          tempP.destY = 180 + (80 * (num - 1)) + 15;
+          tempP.prevY = tempP.destY;
+          tempP.y = tempP.destY;
           players[data.hash] = tempP;
           if(numPlayers == num){
-          $("#lobby").hide();
-          $("#drawer").show();
-          ctx.drawImage(mapImage,0,0,937,661);
-          requestAnimationFrame(redraw);
+            $("#lobby").hide();
+            $("#drawer").show();
+            ctx.drawImage(mapImage,0,0,937,661);
+            requestAnimationFrame(redraw);
           }
 
         }
         if(num == 3){
-        tempP.destX = 460;
-        tempP.prevX = 460;
-        tempP.x = 460;
-        tempP.destY = 490;
-        tempP.prevY = 490;
-        tempP.y = 490;
+          tempP.destX = 40;
+          tempP.prevX = 40;
+          tempP.x = 40;
+          tempP.destY = 180 + (80 * (num - 1)) + 15;
+          tempP.prevY = tempP.destY;
+          tempP.y = tempP.destY;
         players[data.hash] = tempP;
           if(numPlayers == num){
           $("#lobby").hide();
@@ -127,18 +127,18 @@
           }
         }
          if(num == 4){
-        tempP.destX = 460;
-        tempP.prevX = 460;
-        tempP.x = 460;
-        tempP.destY = 490;
-        tempP.prevY = 490;
-        tempP.y = 490;
-        players[data.hash] = tempP;
+          tempP.destX = 40;
+          tempP.prevX = 40;
+          tempP.x = 40;
+          tempP.destY = 180 + (80 * (num - 1)) + 15;
+          tempP.prevY = tempP.destY;
+          tempP.y = tempP.destY;
+          players[data.hash] = tempP;
           if(numPlayers == num){
-          $("#lobby").hide();
-          $("#drawer").show();
-          ctx.drawImage(mapImage,0,0,937,661);
-          requestAnimationFrame(redraw);
+            $("#lobby").hide();
+            $("#drawer").show();
+            ctx.drawImage(mapImage,0,0,937,661);
+            requestAnimationFrame(redraw);
           }
         }
         //set the character by their hash

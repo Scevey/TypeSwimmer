@@ -69,13 +69,14 @@ const redraw = (time) => {
         }
       }
     }
-      let offsetX = spriteSizes.width * player.frame;
-      let offsetY = spriteSizes.height * player.direction;
+      let offsetX = spriteSizes.WIDTH * player.frame;
+      let offsetY = spriteSizes.HEIGHT * player.direction;
     //draw our characters
+    console.dir(fishImage);
     ctx.drawImage(
       fishImage, 
-      spriteSizes.WIDTH * player.iconx + offsetX,
-      spriteSizes.HEIGHT * player.icony + offsetY,
+      spriteSizes.WIDTH * player.iconX + offsetX,
+      spriteSizes.HEIGHT * player.iconY + offsetY,
       spriteSizes.WIDTH, 
       spriteSizes.HEIGHT,
       player.x, 

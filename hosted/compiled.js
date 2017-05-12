@@ -68,10 +68,11 @@ var redraw = function redraw(time) {
         }
       }
     }
-    var offsetX = spriteSizes.width * player.frame;
-    var offsetY = spriteSizes.height * player.direction;
+    var offsetX = spriteSizes.WIDTH * player.frame;
+    var offsetY = spriteSizes.HEIGHT * player.direction;
     //draw our characters
-    ctx.drawImage(fishImage, spriteSizes.WIDTH * player.iconx + offsetX, spriteSizes.HEIGHT * player.icony + offsetY, spriteSizes.WIDTH, spriteSizes.HEIGHT, player.x, player.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);
+    console.dir(fishImage);
+    ctx.drawImage(fishImage, spriteSizes.WIDTH * player.iconX + offsetX, spriteSizes.HEIGHT * player.iconY + offsetY, spriteSizes.WIDTH, spriteSizes.HEIGHT, player.x, player.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);
     ctx.filter = "none";
     ctx.fillStyle = 'white';
     ctx.strokeStyle = 'black';
@@ -180,12 +181,12 @@ var getGameReady = function getGameReady(data) {
   var tempP = data;
   num++;
   if (num == 1) {
-    tempP.destX = 460;
-    tempP.prevX = 460;
-    tempP.x = 460;
-    tempP.destY = 490;
-    tempP.prevY = 490;
-    tempP.y = 490;
+    tempP.destX = 40;
+    tempP.prevX = 40;
+    tempP.x = 40;
+    tempP.destY = 180 + 80 * (num - 1) + 15;
+    tempP.prevY = tempP.destY;
+    tempP.y = tempP.destY;
     players[data.hash] = tempP;
     $("#lobby").hide();
     $("#drawer").show();
@@ -193,12 +194,12 @@ var getGameReady = function getGameReady(data) {
     requestAnimationFrame(redraw);
   }
   if (num == 2) {
-    tempP.destX = 460;
-    tempP.prevX = 460;
-    tempP.x = 460;
-    tempP.destY = 490;
-    tempP.prevY = 490;
-    tempP.y = 490;
+    tempP.destX = 40;
+    tempP.prevX = 40;
+    tempP.x = 40;
+    tempP.destY = 180 + 80 * (num - 1) + 15;
+    tempP.prevY = tempP.destY;
+    tempP.y = tempP.destY;
     players[data.hash] = tempP;
     if (numPlayers == num) {
       $("#lobby").hide();
@@ -208,12 +209,12 @@ var getGameReady = function getGameReady(data) {
     }
   }
   if (num == 3) {
-    tempP.destX = 460;
-    tempP.prevX = 460;
-    tempP.x = 460;
-    tempP.destY = 490;
-    tempP.prevY = 490;
-    tempP.y = 490;
+    tempP.destX = 40;
+    tempP.prevX = 40;
+    tempP.x = 40;
+    tempP.destY = 180 + 80 * (num - 1) + 15;
+    tempP.prevY = tempP.destY;
+    tempP.y = tempP.destY;
     players[data.hash] = tempP;
     if (numPlayers == num) {
       $("#lobby").hide();
@@ -223,12 +224,12 @@ var getGameReady = function getGameReady(data) {
     }
   }
   if (num == 4) {
-    tempP.destX = 460;
-    tempP.prevX = 460;
-    tempP.x = 460;
-    tempP.destY = 490;
-    tempP.prevY = 490;
-    tempP.y = 490;
+    tempP.destX = 40;
+    tempP.prevX = 40;
+    tempP.x = 40;
+    tempP.destY = 180 + 80 * (num - 1) + 15;
+    tempP.prevY = tempP.destY;
+    tempP.y = tempP.destY;
     players[data.hash] = tempP;
     if (numPlayers == num) {
       $("#lobby").hide();
@@ -355,6 +356,7 @@ var trackPoints = [460, 490, 630, 490, 720, 450, 740, 410, 740, 280, 685, 225, 6
 var roomCode;
 var players = {}; //character list
 var num = 0;
+var goingForward = true;
 //keycode map from http://stackoverflow.com/questions/1772179/get-character-value-from-keycode-in-javascript-then-trim
 var keyboardMap = ["", // [0]
 "", // [1]
@@ -529,7 +531,7 @@ var keyboardMap = ["", // [0]
 "ASTERISK", // [170]
 "PLUS", // [171]
 "PIPE", // [172]
-"-", // [173]
+"", // [173]
 "OPEN_CURLY_BRACKET", // [174]
 "CLOSE_CURLY_BRACKET", // [175]
 "TILDE", // [176]
@@ -545,7 +547,7 @@ var keyboardMap = ["", // [0]
 "SEMICOLON", // [186]
 "EQUALS", // [187]
 "COMMA", // [188]
-"MINUS", // [189]
+"-", // [189]
 "PERIOD", // [190]
 "SLASH", // [191]
 "BACK_QUOTE", // [192]
@@ -635,79 +637,24 @@ var keyDownHandler = function keyDownHandler(e) {
 var advanceOnTrack = function advanceOnTrack() {
   var player = players[hash];
   player.prevX = Math.ceil(player.prevX);
-  player.prevY = Math.ceil(player.prevY);
-  /*if (trackMoveIndex == 0 && player.prevX == 620) { //work on this later
-    trackMoveIndex += 2;
-    player.destX = trackPoints[trackMoveIndex];
-    player.destY = trackPoints[trackMoveIndex + 1];
-  }
-  
-  else if (trackMoveIndex == 6 && player.prevY == 290) {
-    trackMoveIndex += 2;
-    player.destX = trackPoints[trackMoveIndex];
-    player.destY = trackPoints[trackMoveIndex + 1];
-  }
-  
-  else if (trackMoveIndex == 12 && player.prevX == 310) {
-    trackMoveIndex += 2;
-    player.destX = trackPoints[trackMoveIndex];
-    player.destY = trackPoints[trackMoveIndex + 1];
-  }
-  
-  else if (trackMoveIndex == 18 && player.prevY == 400) {
-    trackMoveIndex += 2;
-    player.destX = trackPoints[trackMoveIndex];
-    player.destY = trackPoints[trackMoveIndex + 1];
-  }
-  
-  else if (trackMoveIndex == 24 && player.prevX == 450) {
-    trackMoveIndex = 0;
-    player.destX = trackPoints[0];
-    player.destY = trackPoints[1];
-    win();
-  }
-  
-  else if (trackMoveIndex == 0) {
-    player.destX += 10;
-  }
-  
-  else if (trackMoveIndex == 6) {
-    player.destY -= 10;
-  }
-  
-  else if (trackMoveIndex == 12) {
-    player.destX -= 10;
-  }
-  
-  else if (trackMoveIndex == 18) {
-    player.destY += 10;
-  }
-  
-  else if (trackMoveIndex == 24) {
-    player.destX += 10;
-  }
-  
-  else {
-    trackMoveIndex += 2;
-    player.destX = trackPoints[trackMoveIndex];
-    player.destY = trackPoints[trackMoveIndex + 1];
-  }*/
 
-  //use this for quick testing
-  if (trackMoveIndex == 2) {
-    trackMoveIndex = 0;
-    player.destX = trackPoints[0];
-    player.destY = trackPoints[1];
+  if (player.prevX >= 860) {
+    goingForward = false;
+  }
+
+  if (!goingForward && player.prevX <= 40) {
     var data = {
       color: selected,
       room: roomCode,
       name: name
     };
     socket.emit('endGame', data);
+  }
+
+  if (goingForward) {
+    player.destX += 40;
   } else {
-    trackMoveIndex += 2;
-    player.destX = trackPoints[trackMoveIndex];
-    player.destY = trackPoints[trackMoveIndex + 1];
+    player.destX -= 40;
   }
 };
 
