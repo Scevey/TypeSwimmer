@@ -118,17 +118,6 @@ const updatePosition = () => {
   player.prevX = player.x;
   player.prevY = player.y;
 
-  //determine direction based on the inputs of direction keys 
-  if(player.moveUp && player.moveLeft) player.direction = directions.UPLEFT;
-  if(player.moveUp && player.moveRight) player.direction = directions.UPRIGHT;
-  if(player.moveDown && player.moveLeft) player.direction = directions.DOWNLEFT;
-  if(player.moveDown && player.moveRight) player.direction = directions.DOWNRIGHT;
-
-  if(player.moveDown && !(player.moveRight || player.moveLeft)) player.direction = directions.DOWN;
-  if(player.moveUp && !(player.moveRight || player.moveLeft)) player.direction = directions.UP;
-  if(player.moveLeft && !(player.moveUp || player.moveDown)) player.direction = directions.LEFT;
-  if(player.moveRight && !(player.moveUp || player.moveDown)) player.direction = directions.RIGHT;
-
   //reset this character's alpha so they are always smoothly animating
   player.alpha = 0.05;
   var data = {

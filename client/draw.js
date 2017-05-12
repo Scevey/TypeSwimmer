@@ -11,7 +11,7 @@ const directions = {
 //size of our character sprites
 const spriteSizes = {
   WIDTH: 32,
-  HEIGHT: 34
+  HEIGHT: 32
 };
 //function to lerp (linear interpolation)
 //Takes position one, position two and the 
@@ -72,7 +72,6 @@ const redraw = (time) => {
       let offsetX = spriteSizes.WIDTH * player.frame;
       let offsetY = spriteSizes.HEIGHT * player.direction;
     //draw our characters
-    console.dir(fishImage);
     ctx.drawImage(
       fishImage, 
       spriteSizes.WIDTH * player.iconX + offsetX,

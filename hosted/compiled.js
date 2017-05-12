@@ -13,7 +13,7 @@ var directions = {
 //size of our character sprites
 var spriteSizes = {
   WIDTH: 32,
-  HEIGHT: 34
+  HEIGHT: 32
 };
 //function to lerp (linear interpolation)
 //Takes position one, position two and the 
@@ -71,7 +71,6 @@ var redraw = function redraw(time) {
     var offsetX = spriteSizes.WIDTH * player.frame;
     var offsetY = spriteSizes.HEIGHT * player.direction;
     //draw our characters
-    console.dir(fishImage);
     ctx.drawImage(fishImage, spriteSizes.WIDTH * player.iconX + offsetX, spriteSizes.HEIGHT * player.iconY + offsetY, spriteSizes.WIDTH, spriteSizes.HEIGHT, player.x, player.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);
     ctx.filter = "none";
     ctx.fillStyle = 'white';
@@ -188,6 +187,7 @@ var getGameReady = function getGameReady(data) {
     tempP.prevY = tempP.destY;
     tempP.y = tempP.destY;
     players[data.hash] = tempP;
+    start(data.hash);
     $("#lobby").hide();
     $("#drawer").show();
     ctx.drawImage(mapImage, 0, 0, 937, 661);
@@ -201,6 +201,7 @@ var getGameReady = function getGameReady(data) {
     tempP.prevY = tempP.destY;
     tempP.y = tempP.destY;
     players[data.hash] = tempP;
+    start(data.hash);
     if (numPlayers == num) {
       $("#lobby").hide();
       $("#drawer").show();
@@ -216,6 +217,7 @@ var getGameReady = function getGameReady(data) {
     tempP.prevY = tempP.destY;
     tempP.y = tempP.destY;
     players[data.hash] = tempP;
+    start(data.hash);
     if (numPlayers == num) {
       $("#lobby").hide();
       $("#drawer").show();
@@ -231,6 +233,7 @@ var getGameReady = function getGameReady(data) {
     tempP.prevY = tempP.destY;
     tempP.y = tempP.destY;
     players[data.hash] = tempP;
+    start(data.hash);
     if (numPlayers == num) {
       $("#lobby").hide();
       $("#drawer").show();
@@ -639,6 +642,9 @@ var advanceOnTrack = function advanceOnTrack() {
   player.prevX = Math.ceil(player.prevX);
 
   if (player.prevX >= 860) {
+    player.moveRight == false;
+    player.moveLeft == true;
+    player.direction = 1;
     goingForward = false;
   }
 
@@ -660,7 +666,8 @@ var advanceOnTrack = function advanceOnTrack() {
 
 var start = function start(data) {
   var player = players[data];
-  player.moveDown = true;
+  player.moveRight = true;
+  player.direction = 2;
 };
 
 var init = function init() {
@@ -810,17 +817,6 @@ var updatePosition = function updatePosition() {
   //move the last x/y to our previous x/y variables
   player.prevX = player.x;
   player.prevY = player.y;
-
-  //determine direction based on the inputs of direction keys 
-  if (player.moveUp && player.moveLeft) player.direction = directions.UPLEFT;
-  if (player.moveUp && player.moveRight) player.direction = directions.UPRIGHT;
-  if (player.moveDown && player.moveLeft) player.direction = directions.DOWNLEFT;
-  if (player.moveDown && player.moveRight) player.direction = directions.DOWNRIGHT;
-
-  if (player.moveDown && !(player.moveRight || player.moveLeft)) player.direction = directions.DOWN;
-  if (player.moveUp && !(player.moveRight || player.moveLeft)) player.direction = directions.UP;
-  if (player.moveLeft && !(player.moveUp || player.moveDown)) player.direction = directions.LEFT;
-  if (player.moveRight && !(player.moveUp || player.moveDown)) player.direction = directions.RIGHT;
 
   //reset this character's alpha so they are always smoothly animating
   player.alpha = 0.05;

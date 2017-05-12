@@ -90,6 +90,7 @@
           tempP.prevY = tempP.destY;
           tempP.y = tempP.destY;
           players[data.hash] = tempP;
+          start(data.hash);
           $("#lobby").hide();
           $("#drawer").show();
           ctx.drawImage(mapImage,0,0,937,661);
@@ -103,6 +104,7 @@
           tempP.prevY = tempP.destY;
           tempP.y = tempP.destY;
           players[data.hash] = tempP;
+          start(data.hash);
           if(numPlayers == num){
             $("#lobby").hide();
             $("#drawer").show();
@@ -119,6 +121,7 @@
           tempP.prevY = tempP.destY;
           tempP.y = tempP.destY;
         players[data.hash] = tempP;
+          start(data.hash);
           if(numPlayers == num){
           $("#lobby").hide();
           $("#drawer").show();
@@ -134,6 +137,7 @@
           tempP.prevY = tempP.destY;
           tempP.y = tempP.destY;
           players[data.hash] = tempP;
+           start(data.hash);
           if(numPlayers == num){
             $("#lobby").hide();
             $("#drawer").show();

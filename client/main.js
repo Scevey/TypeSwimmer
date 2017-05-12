@@ -309,10 +309,13 @@ const advanceOnTrack = () => {
   player.prevX = Math.ceil(player.prevX);
   
   if (player.prevX >= 860) {
+    player.moveRight == false;
+    player.moveLeft == true;
+    player.direction = 1;
     goingForward = false;
   }
   
-  if (!goingForward && player.prevX <= 40) {
+  if (!goingForward && player.prevX <= 80) {
     var data = {
       color: selected,
       room: roomCode,
@@ -330,7 +333,8 @@ const advanceOnTrack = () => {
 
 const start = (data) => {
   const player = players[data];
-  player.moveDown = true;
+  player.moveRight = true;
+  player.direction = 2;
 }
 
 const init = () => {
