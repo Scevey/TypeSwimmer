@@ -84,11 +84,11 @@ var redraw = function redraw(time) {
   ctx.font = "20pt Arial";
   ctx.textAlign = "center";
   for (var i = 0; i < word.length; i++) {
-    ctx.fillText(word[i], wordDraw + 20 * i, canvas.height / 2);
+    ctx.fillText(word[i], wordDraw + 20 * i, canvas.height - 40);
   }
   ctx.beginPath();
-  ctx.moveTo(wordDraw + 20 * wordIndex - 10, canvas.height / 2 + 5);
-  ctx.lineTo(wordDraw + 20 * (wordIndex + 1) - 10, canvas.height / 2 + 5);
+  ctx.moveTo(wordDraw + 20 * wordIndex - 10, canvas.height - 40);
+  ctx.lineTo(wordDraw + 20 * (wordIndex + 1) - 10, canvas.height - 40);
   ctx.stroke();
   ctx.restore();
 
@@ -112,8 +112,9 @@ var readyUp = function readyUp(data) {
     document.getElementById(playerID).textContent = "In Lobby";
     document.getElementById(playerName).textContent = data.roomnames[i];
   }
-  document.getElementById('lobby').style.display = 'block';
-  document.getElementById('index').style.display = 'none';
+  $("#index").hide();
+  $("#lobby").show();
+
   if (numPlayers == 1) {
     //call function to send calls to determine player roles
     socket.emit('setup', { room: roomCode });
@@ -161,7 +162,7 @@ var create = function create() {
 };
 //show start button
 var showStart = function showStart() {
-  document.getElementById('startButton').style.display = 'block';
+  $("#startButton").show(500);
   document.getElementById('status').textContent = "Room Full!";
   getWord();
 };
@@ -186,8 +187,8 @@ var getGameReady = function getGameReady(data) {
     tempP.prevY = 490;
     tempP.y = 490;
     players[data.hash] = tempP;
-    document.getElementById('drawer').style.display = 'block';
-    document.getElementById('lobby').style.display = 'none';
+    $("#lobby").hide();
+    $("#drawer").show();
     ctx.drawImage(mapImage, 0, 0, 937, 661);
     requestAnimationFrame(redraw);
   }
@@ -200,8 +201,8 @@ var getGameReady = function getGameReady(data) {
     tempP.y = 490;
     players[data.hash] = tempP;
     if (numPlayers == num) {
-      document.getElementById('drawer').style.display = 'block';
-      document.getElementById('lobby').style.display = 'none';
+      $("#lobby").hide();
+      $("#drawer").show();
       ctx.drawImage(mapImage, 0, 0, 937, 661);
       requestAnimationFrame(redraw);
     }
@@ -215,8 +216,8 @@ var getGameReady = function getGameReady(data) {
     tempP.y = 490;
     players[data.hash] = tempP;
     if (numPlayers == num) {
-      document.getElementById('drawer').style.display = 'block';
-      document.getElementById('lobby').style.display = 'none';
+      $("#lobby").hide();
+      $("#drawer").show();
       ctx.drawImage(mapImage, 0, 0, 937, 661);
       requestAnimationFrame(redraw);
     }
@@ -230,8 +231,8 @@ var getGameReady = function getGameReady(data) {
     tempP.y = 490;
     players[data.hash] = tempP;
     if (numPlayers == num) {
-      document.getElementById('drawer').style.display = 'block';
-      document.getElementById('lobby').style.display = 'none';
+      $("#lobby").hide();
+      $("#drawer").show();
       ctx.drawImage(mapImage, 0, 0, 937, 661);
       requestAnimationFrame(redraw);
     }
@@ -280,7 +281,9 @@ var clearError = function clearError() {
   document.getElementById('error').style.display = 'none';
 };
 var choosePlayer = function choosePlayer(name) {
-  console.log(name);
+  $("#ad4 img").removeClass("selected");
+  var id = "#" + name;
+  $(id).addClass('selected');
   switch (name) {
     case 'blue':
       //document.getElementById(name) add class selected

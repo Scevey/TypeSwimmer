@@ -35,10 +35,14 @@ canvas{
 	background-color: rgb(255,255,255);
 }
 .icon{
-	margin-left: 45%;
+	border: 5px solid #000000;
+	margin-left: 40%;
 	display: block;
 	margin-top: 20px;
 	margin-bottom: 20px;
+}
+.selected{
+	border: 5px solid yellow;
 }
 #mainCanvas {
 	background: #ffffff;
@@ -210,6 +214,7 @@ label{
    display: none;
  }
 	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="/assets/compiled.js"> </script>
@@ -261,15 +266,16 @@ label{
 		<button style="display:none;" id="startButton" onclick="gameStart()">Start Game</button>
 	</div>
 	</div>
-	<div id='ad4' style="background: blue; width: 200px; height: 661px">
-	<h1 class="title">Choose An Icon</h1>
-	<img class="icon" src="/assets/blue.png" height="34" alt="Blue Icon" onclick="choosePlayer('blue')">
-	<img class="icon" src="/assets/brown.png" height="34" alt="Brown Icon" onclick="choosePlayer('brown')">
-	<img class="icon" src="/assets/yellow.png" height="34" alt="Yellow Icon" onclick="choosePlayer('yellow')">
-	<img class="icon" src="/assets/green.png" height="34" alt="Green Icon" onclick="choosePlayer('green')">
-	<img class="icon" src="/assets/red.png" height="34" alt="Red Icon" onclick="choosePlayer('red')">
-	<img class="icon" src="/assets/snek.png" height="34"  alt="Frog Icon" onclick="choosePlayer('snek')">
-	<img class="icon" src="/assets/frog.png" height="34"  alt="Snek Icon" onclick="choosePlayer('frog')">
+	<div id='ad4' style="background: inherit; width: 200px; height: 661px">
+	<h2 class="title" style="padding-top: 20px;">Choose An Icon</h2>
+	<img id='blue' class="icon selected" src="/assets/blue.png" height="34" alt="Blue Icon" onclick="choosePlayer('blue')">
+	<img id='brown'  class="icon" src="/assets/brown.png" height="34" alt="Brown Icon" onclick="choosePlayer('brown')">
+	<img id='yellow'  class="icon" src="/assets/yellow.png" height="34" alt="Yellow Icon" onclick="choosePlayer('yellow')">
+	<img id='green' class="icon" src="/assets/green.png" height="34" alt="Green Icon" onclick="choosePlayer('green')">
+	<img id='red' class="icon" src="/assets/red.png" height="34" alt="Red Icon" onclick="choosePlayer('red')">
+	<img id='snek'  class="icon" src="/assets/snek.png" height="34"  alt="Frog Icon" onclick="choosePlayer('snek')">
+	<img id='frog' class="icon" src="/assets/frog.png" height="34"  alt="Snek Icon" onclick="choosePlayer('frog')">
+	<h2 class="title">Pick your player!</h2>
 	</div>
 </div>
 <div id="index">

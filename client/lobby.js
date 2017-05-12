@@ -13,8 +13,9 @@
 			document.getElementById(playerID).textContent = "In Lobby";
 			document.getElementById(playerName).textContent = data.roomnames[i];
 			}
-			document.getElementById('lobby').style.display = 'block';
-			document.getElementById('index').style.display = 'none';
+      $("#index").hide();
+      $("#lobby").show();
+
 			if(numPlayers == 1){
 				//call function to send calls to determine player roles
 				socket.emit('setup',{room: roomCode});
@@ -63,7 +64,7 @@
 		}
     //show start button
 		const showStart = ()=>{
-			document.getElementById('startButton').style.display = 'block';
+      $("#startButton").show(500);
 			document.getElementById('status').textContent = "Room Full!";
       getWord();
 		}
@@ -89,8 +90,8 @@
         tempP.prevY = 490;
         tempP.y = 490;
         players[data.hash] = tempP;
-                  document.getElementById('drawer').style.display = 'block';
-          document.getElementById('lobby').style.display = 'none';
+          $("#lobby").hide();
+          $("#drawer").show();
           ctx.drawImage(mapImage,0,0,937,661);
           requestAnimationFrame(redraw);
         }
@@ -103,8 +104,8 @@
         tempP.y = 490;
           players[data.hash] = tempP;
           if(numPlayers == num){
-          document.getElementById('drawer').style.display = 'block';
-          document.getElementById('lobby').style.display = 'none';
+          $("#lobby").hide();
+          $("#drawer").show();
           ctx.drawImage(mapImage,0,0,937,661);
           requestAnimationFrame(redraw);
           }
@@ -119,8 +120,8 @@
         tempP.y = 490;
         players[data.hash] = tempP;
           if(numPlayers == num){
-          document.getElementById('drawer').style.display = 'block';
-          document.getElementById('lobby').style.display = 'none';
+          $("#lobby").hide();
+          $("#drawer").show();
           ctx.drawImage(mapImage,0,0,937,661);
           requestAnimationFrame(redraw); 
           }
@@ -134,8 +135,8 @@
         tempP.y = 490;
         players[data.hash] = tempP;
           if(numPlayers == num){
-          document.getElementById('drawer').style.display = 'block';
-          document.getElementById('lobby').style.display = 'none';
+          $("#lobby").hide();
+          $("#drawer").show();
           ctx.drawImage(mapImage,0,0,937,661);
           requestAnimationFrame(redraw);
           }
@@ -185,7 +186,9 @@
      document.getElementById('error').style.display = 'none';
     }
     const choosePlayer = (name) =>{
-      console.log(name);
+      $("#ad4 img").removeClass("selected");
+      let id = "#"+name;
+      $(id).addClass('selected');    
       switch(name) {
     case 'blue':
         //document.getElementById(name) add class selected
