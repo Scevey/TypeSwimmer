@@ -1,219 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<style>
-.wrap { 
-	width: 900px; 
-	margin: 0 auto; 
-	margin-top: 1%;
-	padding-top: 1%;
-	padding-bottom: 1%;
-	background-color: #ededed;
-}
-#p0,#p1,#p2,#p3{
-	max-width: 400px;
-	max-height:390px;
-}
-#player0,#player1,#player2,#player3{
-	background: #ededed;
-	border: 2px solid;
-}
-.smallerwrap { 
-	width: 500px; 
-	margin: 0 auto; 
-	margin-top: 3%;
-	padding-top: 2%;
-	padding-bottom: 1%;
-	background-color: #ededed;
-}
-body{
-	
-	<!---background-color: #ADD8E6; --> 
-	font-family: tahoma, verdana, sans serif;
-}
-canvas{
-	background-color: rgb(255,255,255);
-}
-.icon{
-	border: 5px solid #000000;
-	margin-left: 40%;
-	display: block;
-	margin-top: 20px;
-	margin-bottom: 20px;
-}
-.selected{
-	border: 5px solid yellow;
-}
-#mainCanvas {
-	background: #ffffff;
-	position:absolute;
-	z-index: 0;
-	left: 10px;
-	top: 10px;
-	box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
-}
-#controls {
-	position: absolute;
-	z-index: 2;
-	left: 25px;
-	top: 25px;
-	}
-#topCanvas{
-		background: rgba(0,0,0,0);
-		position: absolute;
-		left: 10px;
-		top: 10px;
-		z-index: 1;
-		cursor: pointer;
-	}
-label{
-	font-size: 12px;
-	margin-right:0.75em;
-}
-.title{
-	text-align:center;
-}
-.parent {
-	line-height: 2;
-	width: 50%;
-}
-.parent > ul {
-  display: inline-block;
-}
-.lobbyButton{
-    cursor: pointer;
-    cursor: hand; 
-    height: 50px;
-    border-radius: 5px;
-    width: 150px;
-    border-color: rosybrown;
-    color: white;
-    font-weight: 900;
-	border: 3px solid;
-}
-#startButton{
-    cursor: pointer;
-    cursor: hand; 
-    height: 50px;
-    border-radius: 5px;
-    width: 150px;
-    color: white;
-    font-weight: 900;
-	border: 3px solid;
-	background: rgb(47,181,202);
-	margin-left: 40%;   
-	border-color: rosybrown;
-
-}
-#countdown{
-	display:inline;
-	margin-left: 20px;
-}
-#createLobby{
-	margin-left: 13%;
-	background: rgb(47,181,202);
-}
-#joinLobby{
-	margin-left: 190px;
-	background: rgb(255,89,105);
-}
-#form{
-    float: right;
-    margin-right: 100px;
-	
-}
-#user{
-	display: inline;
-}
-#form1{
-	margin-left: 35%;
-	margin-bottom: 2%;
-	margin-top: 2%;
-}
-#subject,#feed, #chat{
-	border: 3px solid;
-	border-color: brown;
-	background-color: #ededed;
-}
-#subject{
-	border-bottom:0px;
-}
-#player1{
-	border-color: red;
-}
-#player2{
-	border-color: blue;
-}
-#player3{
-	border-color: yellow;
-}
-#player4{
-	border-color: green;
-	margin-left: 20px;
-}
-.chooserBox{
-	padding:3px;
-	margin: 9px;
-}
-#content{
-	border: 3px solid black;
-}
-#wordbox{
-	display: block;
-	z-index: 50;
-	position: absolute;
-	bottom: 50%;
-	left: 37%;
-	padding: 20px;
-	border: 3px solid;
-	border-color: brown;
-}
-#ad2{
-    margin-left: 50px;
-    float: right;
-    margin-right: 100px;
-	}
-#ad1{
-    float: left;
-    margin-right: 75px;
-    margin-left: 100px;
-}
-#ad3{
-    float: right;
-    margin-top: -420px;
-    margin-right: 100px;
-}
-#ad4{
-    margin-top: -660px;
-    margin-left: 900px;
-}
-#error{
-	display: block;
-	z-index: 50;
-	position: absolute;
-	bottom: 40%;
-	left: 37%;
-	background: lightgrey;
-	padding: 20px;
-	border: 3px solid;
-	border-color: black;
-}
-#errormessage{
-	color: red;
-	text-align: center;
-	font-weight: 900;
-}
-.playerBox{
-	padding:3px;
-	margin: 9px;
-	margin: 5px 50px;
-	border: 2px solid black;
-	border-radius: 10px;
-}
-.hidden {
-   display: none;
- }
-	</style>
+	<link rel="stylesheet" type="text/css" href="/assets/styles.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
@@ -309,10 +97,21 @@ label{
 <div id='ad3'><img src="/assets/ad.png" alt ="ad space"></div>
 
 </div>
-<div id="win" style="display:none"class="wrap">
+<div id="win" style="display:none;" class="wrap">
+
+	<div class="container">
 	<h1 class="title">Game Over!</h1>
-	<h2 class="title" id="winmessage"></h2>
-</div>
+	<h1 id='winmessage' class="title">Player Blank Won !</h1>
+	<img id='blue1' style="display: none;"' class="icon1" src="/assets/blue.png" height="34" alt="Blue Icon">
+	<img id='brown1' style="display: none;" class="icon1" src="/assets/brown.png" height="34" alt="Brown Icon">
+	<img id='yellow1'style="display: none;"  class="icon1" src="/assets/yellow.png" height="34" alt="Yellow Icon">
+	<img id='green1'style="display: none;" class="icon1" src="/assets/green.png" height="34" alt="Green Icon">
+	<img id='red1' style="display: none;"class="icon1" src="/assets/red.png" height="34" alt="Red Icon">
+	<img id='snek1' style="display: none;" class="icon1" src="/assets/snek.png" height="34"  alt="Frog Icon" >
+	<img id='frog1' style="display: none;" class="icon1" src="/assets/frog.png" height="34"  alt="Snek Icon">
+	</div>
+		<div id="confetti"></div>
+	</div>
 <div id='error' style="display:none">
 	<h2 class="title" id="errormessage"></h2>
 </div>

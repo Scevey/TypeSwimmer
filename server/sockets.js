@@ -24,10 +24,6 @@ let io;
   UP: 7,
 };*/
 
-const handleAttack = (data) => {
-  io.sockets.in(data.room).emit('attackHit', data.hash);
-};
-
 // function to setup our socket server
 const setupSockets = (ioServer) => {
   // set our io server instance
@@ -44,7 +40,7 @@ const setupSockets = (ioServer) => {
         socket.emit('msg', 'Sorry that room doesnt exist');
         return;
       }
-      if (activegames[room] == true) {
+      if (activegames[room] === true) {
         socket.emit('msg', 'Sorry the game has started');
         return;
       }
@@ -90,6 +86,10 @@ const setupSockets = (ioServer) => {
       };
       socket.emit('lobby', outdata);
     });
+    socket.on('endGame', (data) => {
+      delete activegames[data.room];
+      io.sockets.in(data.room).emit('end', data);
+    });
     socket.on('gameStart', (data) => {
       activegames[data.room] = true;
       io.sockets.in(data.room).emit('gameStart');
@@ -101,13 +101,8 @@ const setupSockets = (ioServer) => {
     socket.on('setup', (data) => {
       io.sockets.in(data.room).emit('showStart');
     });
-    socket.on('handleAttack', (data) => {
-      handleAttack(data);
-    });
     // when this user sends the server a movement update
     socket.on('movementUpdate', (data) => {
-      // update the user's info
-      // NOTICE: THIS IS NOT VALIDED AND IS UNSAFE
       characters[data.hash] = data.playerData;
       // update the timestamp of the last change for this character
       characters[data.hash].lastUpdate = new Date().getTime();
@@ -129,9 +124,6 @@ const setupSockets = (ioServer) => {
       if (characters[data.hash]) {
         delete characters[data.hash];
       }
-
-      // update the character list in our physics calculations
-
       // remove this user from the socket room
       socket.leave(data.room);
     });

@@ -369,7 +369,12 @@ const advanceOnTrack = () => {
     trackMoveIndex = 0;
     player.destX = trackPoints[0];
     player.destY = trackPoints[1];
-    win();
+    var data = {
+      color: selected,
+      room: roomCode,
+      name: name  
+    }
+    socket.emit('endGame', data)
   }
   else { 
     trackMoveIndex += 2;
@@ -399,17 +404,15 @@ const init = () => {
   socket.on('gameStart', getPlayer); //when user joins
   socket.on('addPlayer', getGameReady); //when user joins
   socket.on('updatedMovement', update); //when players move
-  socket.on('left', lose); //when a user leaves
+  socket.on('left', gameOver); //when a user leaves
   socket.on('msg', handleError); //when a user leaves
-  socket.on('winner', win);//win msg
-  socket.on('loser', lose);//lose msg
+  //socket.on('winner', win);//win msg
+  socket.on('end', gameOver);//lose msg
 	socket.on('lobby', readyUp);//lobby setup
 	socket.on('joined', playerJoin);//join lobby
 	socket.on('showword', showWord);//join lobby
 	socket.on('showStart',showStart); //show start
   document.body.addEventListener('keydown', keyDownHandler);
-  
-
 };
 
 window.onload = init;

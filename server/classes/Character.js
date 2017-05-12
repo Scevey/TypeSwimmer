@@ -28,8 +28,8 @@ class Character {
     this.down = false;
     this.left = false;
     this.right = false;
-    this.iconX = data.x,
-    this.iconY = data.y
+    this.iconX = data.x;
+    this.iconY = data.y;
   }
 }
 

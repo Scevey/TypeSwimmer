@@ -188,10 +188,10 @@
     const choosePlayer = (name) =>{
       $("#ad4 img").removeClass("selected");
       let id = "#"+name;
+      selected = name;
       $(id).addClass('selected');    
       switch(name) {
     case 'blue':
-        //document.getElementById(name) add class selected
         x = 0; 
         y = 0;
         break;

@@ -1,0 +1,305 @@
+/*http://www.balbooa.com/blog/tips-and-tricks/the-falling-confetti-animation-with-joomla-website-builder-gridbox* source of css for particles */
+#confetti {
+    left: 0;
+    position: fixed;
+    right: 0;  
+    top: -160px;
+    z-index: 10000;
+}
+ 
+#confetti .ball {
+    animation-iteration-count :infinite !important;
+    -webkit-animation-iteration-count :infinite !important;
+    border-radius: 50%;
+    cursor: default;
+    display: inline-block;
+    height: 10px;
+    user-select: none; 
+    -webkit-user-select: none; 
+    width: 10px;
+}  
+ 
+@-webkit-keyframes falling-left {
+    0% {-webkit-transform: translate3d(0,0,0);opacity: 1;}
+    10% { opacity: 0;}
+    20% { opacity: 1;}
+    30% { opacity: 0;}
+    40% { opacity: 1;}
+    50% { opacity: 0;}
+    60% { opacity: 1;}
+    70% { opacity: 0;}
+    80% { opacity: 1;}
+    90% { opacity: 0;}
+    100% {-webkit-transform: translate3d(0,120vh,0); opacity: 1;}
+}
+ 
+@keyframes falling-left {
+    0% {-webkit-transform: translate3d(0,0,0);opacity: 1;}
+    10% { opacity: 0;}
+    20% { opacity: 1;}
+    30% { opacity: 0;}
+    40% { opacity: 1;}
+    50% { opacity: 0;}
+    60% { opacity: 1;}
+    70% { opacity: 0;}
+    80% { opacity: 1;}
+    90% { opacity: 0;}
+    100% {-webkit-transform: translate3d(0,120vh,0); opacity: 1;}
+}
+ 
+#confetti .ball:nth-child(2n) {
+    -webkit-animation: falling-left linear;
+    animation: falling-left linear ;
+}
+ 
+@-webkit-keyframes falling-right {
+    0% {-webkit-transform: translate3d(0,0,0);opacity: 0;}
+    10% { opacity: 1;}
+    20% { opacity: 0;}
+    30% { opacity: 1;}
+    40% { opacity: 0;}
+    50% { opacity: 1;}
+    60% { opacity: 0;}
+    70% { opacity: 1;}
+    80% { opacity: 0;}
+    90% { opacity: 1;}
+    100% {-webkit-transform: translate3d(0,120vh,0); opacity: 0;}
+}
+ 
+@keyframes falling-right {
+    0% {-webkit-transform: translate3d(0,0,0);opacity: 1;}
+    10% { opacity: 0;}
+    20% { opacity: 1;}
+    30% { opacity: 0;}
+    40% { opacity: 1;}
+    50% { opacity: 0;}
+    60% { opacity: 1;}
+    70% { opacity: 0;}
+    80% { opacity: 1;}
+    90% { opacity: 0;}
+    100% {-webkit-transform: translate3d(0,120vh,0); opacity: 0;}              
+}
+ 
+#confetti .ball:nth-of-type(2n+1) {
+    -webkit-animation: falling-right linear ;
+    animation: falling-right linear;
+}
+.wrap { 
+	width: 900px; 
+	margin: 0 auto; 
+	margin-top: 1%;
+	padding-top: 1%;
+	padding-bottom: 1%;
+	background-color: #ededed;
+}
+#p0,#p1,#p2,#p3{
+	max-width: 400px;
+	max-height:390px;
+}
+#player0,#player1,#player2,#player3{
+	background: #ededed;
+	border: 2px solid;
+}
+.smallerwrap { 
+	width: 500px; 
+	margin: 0 auto; 
+	margin-top: 3%;
+	padding-top: 2%;
+	padding-bottom: 1%;
+	background-color: #ededed;
+}
+body{
+	
+	<!---background-color: #ADD8E6; --> 
+	font-family: tahoma, verdana, sans serif;
+}
+canvas{
+	background-color: rgb(255,255,255);
+}
+.icon{
+	border: 5px solid #000000;
+	margin-left: 40%;
+	display: block;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.icon1{
+	border: 5px solid #000000;
+	display: inline;
+}
+.selected{
+	border: 5px solid yellow;
+}
+#mainCanvas {
+	background: #ffffff;
+	position:absolute;
+	z-index: 0;
+	left: 10px;
+	top: 10px;
+	box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+}
+#controls {
+	position: absolute;
+	z-index: 2;
+	left: 25px;
+	top: 25px;
+	}
+#topCanvas{
+		background: rgba(0,0,0,0);
+		position: absolute;
+		left: 10px;
+		top: 10px;
+		z-index: 1;
+		cursor: pointer;
+	}
+label{
+	font-size: 12px;
+	margin-right:0.75em;
+}
+.title{
+	text-align:center;
+}
+.parent {
+	line-height: 2;
+	width: 50%;
+}
+.parent > ul {
+  display: inline-block;
+}
+.lobbyButton{
+    cursor: pointer;
+    cursor: hand; 
+    height: 50px;
+    border-radius: 5px;
+    width: 150px;
+    border-color: rosybrown;
+    color: white;
+    font-weight: 900;
+	border: 3px solid;
+}
+#startButton{
+    cursor: pointer;
+    cursor: hand; 
+    height: 50px;
+    border-radius: 5px;
+    width: 150px;
+    color: white;
+    font-weight: 900;
+	border: 3px solid;
+	background: rgb(47,181,202);
+	margin-left: 40%;   
+	border-color: rosybrown;
+
+}
+#countdown{
+	display:inline;
+	margin-left: 20px;
+}
+#winmessage{
+	margin-left: 43%;
+	display: inline;
+}
+#createLobby{
+	margin-left: 13%;
+	background: rgb(47,181,202);
+}
+#joinLobby{
+	margin-left: 190px;
+	background: rgb(255,89,105);
+}
+#form{
+    float: right;
+    margin-right: 100px;
+	
+}
+#user{
+	display: inline;
+}
+#form1{
+	margin-left: 35%;
+	margin-bottom: 2%;
+	margin-top: 2%;
+}
+#subject,#feed, #chat{
+	border: 3px solid;
+	border-color: brown;
+	background-color: #ededed;
+}
+#subject{
+	border-bottom:0px;
+}
+#player1{
+	border-color: red;
+}
+#player2{
+	border-color: blue;
+}
+#player3{
+	border-color: yellow;
+}
+#player4{
+	border-color: green;
+	margin-left: 20px;
+}
+.chooserBox{
+	padding:3px;
+	margin: 9px;
+}
+#content{
+	border: 3px solid black;
+}
+#wordbox{
+	display: block;
+	z-index: 50;
+	position: absolute;
+	bottom: 50%;
+	left: 37%;
+	padding: 20px;
+	border: 3px solid;
+	border-color: brown;
+}
+#ad2{
+    margin-left: 50px;
+    float: right;
+    margin-right: 100px;
+	}
+#ad1{
+    float: left;
+    margin-right: 75px;
+    margin-left: 100px;
+}
+#ad3{
+    float: right;
+    margin-top: -420px;
+    margin-right: 100px;
+}
+#ad4{
+    margin-top: -660px;
+    margin-left: 900px;
+}
+#error{
+	display: block;
+	z-index: 50;
+	position: absolute;
+	bottom: 40%;
+	left: 37%;
+	background: lightgrey;
+	padding: 20px;
+	border: 3px solid;
+	border-color: black;
+}
+#errormessage{
+	color: red;
+	text-align: center;
+	font-weight: 900;
+}
+.playerBox{
+	padding:3px;
+	margin: 9px;
+	margin: 5px 50px;
+	border: 2px solid black;
+	border-radius: 10px;
+}
+.hidden {
+   display: none;
+ }

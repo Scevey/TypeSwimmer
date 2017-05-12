@@ -53,35 +53,64 @@ const playerDeath = (data) => {
   }
 };
 
-const win = () => {
+const gameOver = (data) => {
   //winner    
     socket.emit('disconnect');
+    var flakes = '',
+        randomColor,
+        icon,
+        playerColor;
+        
+        icon = data.color+'1';
+      switch(data.color) {
+    case 'blue':
+        playerColor = '000080';
+        break;
+    case 'yellow':
+        playerColor = 'FFFF00';
+        break;
+    case 'green':
+        playerColor = '00DD00';
+        break;
+    case 'red':
+        playerColor = 'FF0000';
+        break;
+    case 'brown':
+        playerColor = '800000';
+        break;
+     case 'snek':
+        playerColor = '00FF00';
+        break;
+    case 'frog':
+        playerColor = '008000';
+        break;
+    default:
+        playerColor = '000080';
+}
+    for(var i = 0, len = 400; i < len; i++) {
+        if(i % 2 == 0){
+            randomColor = playerColor;
+        }
+        else{
+            randomColor = Math.floor(Math.random()*16777215).toString(16);
+        }
 
+        flakes += '<div class="ball" style="background: #'+randomColor;
+        flakes += '; animation-duration: '+(Math.random() * 9 + 2)+'s; animation-delay: ';
+        flakes += (Math.random() * 2 + 0)+'s;"></div>';
+    }
+    $('#winmessage').css('color', '#'+playerColor);
+    $('#'+icon).css('display', 'inline');
+    document.getElementById("winmessage").innerHTML = data.name +' Won!';
+    
+    document.getElementById('confetti').innerHTML = flakes;
     cancelAnimationFrame(animationFrame);
     ctx.clearRect(0, 0, 937, 661);
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, 937, 661);
-    ctx.fillStyle = 'white';
-    ctx.font = '48px serif';
-    ctx.fillText('You Won!', 250, 300);
-
+    $('#win').show();
+    $('#drawer').hide();
   
 };
-const lose = () => {
-  //loser    
-  socket.emit('disconnect');
-    delete players[hash];
-    socket.disconnect();
-      cancelAnimationFrame(animationFrame);
-      ctx.clearRect(0, 0, 937, 661);
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, 937, 661);
-    ctx.fillStyle = 'white';
-    ctx.font = '48px serif';
-    ctx.fillText('You Lost!', 250, 300);
 
-  
-};
 //update this user's positions based on keyboard input
 const updatePosition = () => {
   const player = players[hash];
