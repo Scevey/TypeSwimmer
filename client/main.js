@@ -26,6 +26,7 @@ var roomCode;
 var players = {}; //character list
 var num = 0;
 var goingForward = true;
+var lastCheckpoint = 40;
 //keycode map from http://stackoverflow.com/questions/1772179/get-character-value-from-keycode-in-javascript-then-trim
 var keyboardMap = [
   "", // [0]
@@ -306,29 +307,26 @@ var keyDownHandler = function keyDownHandler(e) {
 
 const advanceOnTrack = () => {
   var player = players[hash];
-  player.prevX = Math.ceil(player.prevX);
+  let checkPrevX = Math.ceil(player.prevX);
   
-  if (player.prevX >= 860) {
+  if (checkPrevX >= 860) {
     player.moveRight == false;
     player.moveLeft == true;
     player.direction = 1;
     goingForward = false;
   }
   
-  if (!goingForward && player.prevX <= 80) {
+  if (!goingForward && checkPrevX <= 80) {
     var data = {
       color: selected,
       room: roomCode,
       name: name  
     }
     socket.emit('endGame', data)
-  } 
-  
-  if (goingForward) {
-    player.destX += 40;
-  } else {
-    player.destX -= 40;
   }
+  
+  lastCheckpoint += 40;
+  player.destX = lastCheckpoint;
 }
 
 const start = (data) => {

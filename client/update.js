@@ -117,6 +117,10 @@ const updatePosition = () => {
   //move the last x/y to our previous x/y variables
   player.prevX = player.x;
   player.prevY = player.y;
+  
+  if (player.destX < lastCheckpoint + 40 - .1) {
+    player.destX += .1;
+  }
 
   //reset this character's alpha so they are always smoothly animating
   player.alpha = 0.05;

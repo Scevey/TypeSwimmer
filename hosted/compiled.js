@@ -360,6 +360,7 @@ var roomCode;
 var players = {}; //character list
 var num = 0;
 var goingForward = true;
+var lastCheckpoint = 40;
 //keycode map from http://stackoverflow.com/questions/1772179/get-character-value-from-keycode-in-javascript-then-trim
 var keyboardMap = ["", // [0]
 "", // [1]
@@ -639,16 +640,16 @@ var keyDownHandler = function keyDownHandler(e) {
 
 var advanceOnTrack = function advanceOnTrack() {
   var player = players[hash];
-  player.prevX = Math.ceil(player.prevX);
+  var checkPrevX = Math.ceil(player.prevX);
 
-  if (player.prevX >= 860) {
+  if (checkPrevX >= 860) {
     player.moveRight == false;
     player.moveLeft == true;
     player.direction = 1;
     goingForward = false;
   }
 
-  if (!goingForward && player.prevX <= 40) {
+  if (!goingForward && checkPrevX <= 80) {
     var data = {
       color: selected,
       room: roomCode,
@@ -657,11 +658,8 @@ var advanceOnTrack = function advanceOnTrack() {
     socket.emit('endGame', data);
   }
 
-  if (goingForward) {
-    player.destX += 40;
-  } else {
-    player.destX -= 40;
-  }
+  lastCheckpoint += 40;
+  player.destX = lastCheckpoint;
 };
 
 var start = function start(data) {
@@ -817,6 +815,10 @@ var updatePosition = function updatePosition() {
   //move the last x/y to our previous x/y variables
   player.prevX = player.x;
   player.prevY = player.y;
+
+  if (player.destX < lastCheckpoint + 40 - .1) {
+    player.destX += .1;
+  }
 
   //reset this character's alpha so they are always smoothly animating
   player.alpha = 0.05;
