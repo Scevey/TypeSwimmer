@@ -16,7 +16,7 @@
       $("#index").hide();
       $("#lobby").show();
 
-			if(numPlayers == 1){
+			if(numPlayers == 4){
 				//call function to send calls to determine player roles
 				socket.emit('setup',{room: roomCode});
 			}
@@ -211,8 +211,8 @@
         break;
     case 'red':
         //document.getElementById(name) add class selected
-        x = 0; 
-        y = 2;
+        x = 2; 
+        y = 1;
         break;
     case 'brown':
         //document.getElementById(name) add class selected
@@ -221,8 +221,8 @@
         break;
      case 'snek':
         //document.getElementById(name) add class selected
-        x = 0; 
-        y = 2;
+        x = 1; 
+        y = 1;
         break;
     case 'frog':
         //document.getElementById(name) add class selected

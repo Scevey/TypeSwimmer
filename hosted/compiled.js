@@ -71,7 +71,7 @@ var redraw = function redraw(time) {
     var offsetX = spriteSizes.WIDTH * player.frame;
     var offsetY = spriteSizes.HEIGHT * player.direction;
     //draw our characters
-    ctx.drawImage(fishImage, spriteSizes.WIDTH * player.iconX + offsetX, spriteSizes.HEIGHT * player.iconY + offsetY, spriteSizes.WIDTH, spriteSizes.HEIGHT, player.x, player.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);
+    ctx.drawImage(fishImage, spriteSizes.WIDTH * 3 * player.iconX + offsetX, spriteSizes.HEIGHT * 4 * player.iconY + offsetY, spriteSizes.WIDTH, spriteSizes.HEIGHT, player.x, player.y, spriteSizes.WIDTH, spriteSizes.HEIGHT);
     ctx.filter = "none";
     ctx.fillStyle = 'white';
     ctx.strokeStyle = 'black';
@@ -115,7 +115,7 @@ var readyUp = function readyUp(data) {
   $("#index").hide();
   $("#lobby").show();
 
-  if (numPlayers == 1) {
+  if (numPlayers == 4) {
     //call function to send calls to determine player roles
     socket.emit('setup', { room: roomCode });
   }
@@ -306,8 +306,8 @@ var choosePlayer = function choosePlayer(name) {
       break;
     case 'red':
       //document.getElementById(name) add class selected
-      x = 0;
-      y = 2;
+      x = 2;
+      y = 1;
       break;
     case 'brown':
       //document.getElementById(name) add class selected
@@ -316,8 +316,8 @@ var choosePlayer = function choosePlayer(name) {
       break;
     case 'snek':
       //document.getElementById(name) add class selected
-      x = 0;
-      y = 2;
+      x = 1;
+      y = 1;
       break;
     case 'frog':
       //document.getElementById(name) add class selected
@@ -658,7 +658,11 @@ var advanceOnTrack = function advanceOnTrack() {
     socket.emit('endGame', data);
   }
 
-  lastCheckpoint += 40;
+  if (goingForward) {
+    lastCheckpoint += 40;
+  } else {
+    lastCheckpoint -= 40;
+  }
   player.destX = lastCheckpoint;
 };
 
@@ -816,8 +820,12 @@ var updatePosition = function updatePosition() {
   player.prevX = player.x;
   player.prevY = player.y;
 
-  if (player.destX < lastCheckpoint + 40 - .1) {
-    player.destX += .1;
+  if (player.destX < lastCheckpoint + 40 - .1 && goingForward || player.destX > lastCheckpoint - 40 && !goingForward && (lastCheckpoint + 40 != 900 || lastCheckpoint - 40 != 0)) {
+    if (goingForward) {
+      player.destX += .1;
+    } else {
+      player.destX -= .1;
+    }
   }
 
   //reset this character's alpha so they are always smoothly animating

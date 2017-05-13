@@ -325,7 +325,11 @@ const advanceOnTrack = () => {
     socket.emit('endGame', data)
   }
   
-  lastCheckpoint += 40;
+  if (goingForward) {
+    lastCheckpoint += 40;
+  } else {
+    lastCheckpoint -= 40;
+  }
   player.destX = lastCheckpoint;
 }
 

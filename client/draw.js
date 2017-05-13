@@ -74,8 +74,8 @@ const redraw = (time) => {
     //draw our characters
     ctx.drawImage(
       fishImage, 
-      spriteSizes.WIDTH * player.iconX + offsetX,
-      spriteSizes.HEIGHT * player.iconY + offsetY,
+      (spriteSizes.WIDTH * 3) * player.iconX + offsetX,
+      (spriteSizes.HEIGHT * 4) * player.iconY + offsetY,
       spriteSizes.WIDTH, 
       spriteSizes.HEIGHT,
       player.x, 
